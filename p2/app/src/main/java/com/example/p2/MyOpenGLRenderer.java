@@ -32,16 +32,27 @@ public class MyOpenGLRenderer implements Renderer {
 		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
 	}
 
+	/*
+	 *	This is the update of the program.
+	 */
 	@Override
 	public void onDrawFrame(GL10 gl)
+	{
+		handleInput();
+		drawElements(gl);
+	}
+
+	private void handleInput()
+	{
+
+	}
+
+	private void drawElements(GL10 gl)
 	{
 		// Clears the screen and depth buffer.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		gl.glLoadIdentity();
-
-		// Handle user input
-		// TODO : handle user input
 
 		spaceShip.draw(gl);
 
@@ -63,5 +74,6 @@ public class MyOpenGLRenderer implements Renderer {
 		// Select the modelview matrix
 		gl.glMatrixMode(GL10.GL_MODELVIEW);	
 	}
+
 
 }

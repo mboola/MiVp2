@@ -1,5 +1,8 @@
 package com.example.p2;
 
-public interface Entity {
-    public boolean update();
+public abstract class Entity implements IEntity
+{
+    protected Vector3 position;
+    protected Mesh mesh;
+    protected int texture;
 }

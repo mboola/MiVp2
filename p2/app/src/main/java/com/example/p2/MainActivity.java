@@ -14,6 +14,7 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GLSurfaceView view = new GLSurfaceView(this);
+        TextureStorage.Initialize();
         renderer = new MyOpenGLRenderer(this);
         view.setRenderer(renderer);
         setContentView(view);
@@ -26,6 +27,6 @@ public class MainActivity extends Activity {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         renderer.addKey(keyCode);
-        return super.onKeyUp(keyCode, event);  // ??
+        return super.onKeyUp(keyCode, event);  // true??
     }
 }

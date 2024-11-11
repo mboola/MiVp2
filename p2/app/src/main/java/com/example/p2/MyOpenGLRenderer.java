@@ -1,5 +1,6 @@
 package com.example.p2;
 
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -25,16 +26,34 @@ public class MyOpenGLRenderer implements Renderer {
 		keysToHandle = new LinkedList<>();
 
 		//Create the objects used in the scene
-		//background = new BackgroundController();
-		//entityController = new EntityController(0, 10);
+		background = new BackgroundController(new Vector3(0, 0.4f, -1), 2);
+		entityController = new EntityController();
 		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
 	}
 
+	/*
+	 *	Called when the app starts or when the app goes background
+	 * 	and then comes back and needs to be recreated.
+	 */
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Image Background color
-		gl.glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
+		gl.glClearColor(1.0f, 1.0f, 1.0f, 0f);
+		background.loadTexture(gl, context);
+	}
 
-		//background.loadTexture(gl, context, R.raw.background);
+	@Override //???????
+	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		// Define the Viewport
+		gl.glViewport(0, 0, width, height);
+		// Select the projection matrix
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		// Reset the projection matrix
+		gl.glLoadIdentity();
+		// Calculate the aspect ratio of the window
+		GLU.gluPerspective(gl, 60.0f, (float) width / (float) height, 0.1f, 1000.0f);
+
+		// Select the modelview matrix
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
 	}
 
 	/*
@@ -57,16 +76,16 @@ public class MyOpenGLRenderer implements Renderer {
 			switch (key)
 			{
 				case KeyEvent.KEYCODE_W:
-					spaceShip.move(0, 1, 0);
+					spaceShip.move(0, 0.2f, 0);
 					break;
 				case KeyEvent.KEYCODE_S:
-					spaceShip.move(0, -1, 0);
+					spaceShip.move(0, -0.2f, 0);
 					break;
 				case KeyEvent.KEYCODE_A:
-					spaceShip.move(-1, 0, 0);
+					spaceShip.move(-0.2f, 0, 0);
 					break;
 				case KeyEvent.KEYCODE_D:
-					spaceShip.move(1, 0, 0);
+					spaceShip.move(0.2f, 0, 0);
 					break;
 				case KeyEvent.KEYCODE_SPACE:
 					System.out.println("Works");
@@ -75,6 +94,7 @@ public class MyOpenGLRenderer implements Renderer {
 		}
 	}
 
+	// Elements must be rendered in order from farthest to nearest.
 	private void drawElements(GL10 gl)
 	{
 		// Clears the screen and depth buffer.
@@ -82,25 +102,9 @@ public class MyOpenGLRenderer implements Renderer {
 
 		gl.glLoadIdentity();
 
+		background.draw(gl);
+		entityController.update(gl);
 		spaceShip.draw(gl);
-
-		//entityController.update(gl);
-		//background.draw(gl);
-	}
-
-	@Override //???????
-	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		// Define the Viewport
-		gl.glViewport(0, 0, width, height);
-		// Select the projection matrix
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		// Reset the projection matrix
-		gl.glLoadIdentity();
-		// Calculate the aspect ratio of the window
-		GLU.gluPerspective(gl, 60.0f, (float) width / (float) height, 0.1f, 1000.0f);
-		
-		// Select the modelview matrix
-		gl.glMatrixMode(GL10.GL_MODELVIEW);	
 	}
 
 	/*

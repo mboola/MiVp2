@@ -6,8 +6,10 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
+import android.view.KeyEvent;
 
-import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class MyOpenGLRenderer implements Renderer {
 
@@ -16,20 +18,23 @@ public class MyOpenGLRenderer implements Renderer {
 	private BackgroundController background;
 	private SpaceShip spaceShip;
 	private Context context;
+	private Queue<Integer> keysToHandle;
 	public MyOpenGLRenderer(Context context)
 	{
 		this.context = context;
+		keysToHandle = new LinkedList<>();
+
+		//Create the objects used in the scene
+		//background = new BackgroundController();
+		//entityController = new EntityController(0, 10);
+		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Image Background color
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
 
-		//Create the objects used in the scene
-		//entityController = new EntityController(0, 10);
-		//background = new BackgroundController(gl);
 		//background.loadTexture(gl, context, R.raw.background);
-		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
 	}
 
 	/*
@@ -44,7 +49,30 @@ public class MyOpenGLRenderer implements Renderer {
 
 	private void handleInput()
 	{
+		int	key;
 
+		while (!keysToHandle.isEmpty())
+		{
+			key = keysToHandle.remove();
+			switch (key)
+			{
+				case KeyEvent.KEYCODE_W:
+					spaceShip.move(0, 1, 0);
+					break;
+				case KeyEvent.KEYCODE_S:
+					spaceShip.move(0, -1, 0);
+					break;
+				case KeyEvent.KEYCODE_A:
+					spaceShip.move(-1, 0, 0);
+					break;
+				case KeyEvent.KEYCODE_D:
+					spaceShip.move(1, 0, 0);
+					break;
+				case KeyEvent.KEYCODE_SPACE:
+					System.out.println("Works");
+					break;
+			}
+		}
 	}
 
 	private void drawElements(GL10 gl)
@@ -75,5 +103,12 @@ public class MyOpenGLRenderer implements Renderer {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);	
 	}
 
+	/*
+	 *	Adds a new key to handle in the next update.
+	 */
+	public void addKey(int keyCode)
+	{
+		keysToHandle.add(keyCode);
+	}
 
 }

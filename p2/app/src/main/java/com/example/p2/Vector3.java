@@ -11,4 +11,11 @@ public class Vector3
         this.y = y;
         this.z = z;
     }
+
+    public void translate(float x, float y, float z)
+    {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+    }
 }

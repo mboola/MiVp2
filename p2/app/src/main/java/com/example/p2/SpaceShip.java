@@ -16,6 +16,11 @@ public class SpaceShip
         this.position = position;
         square = new Square();
     }
+
+    public void move(float x, float y, float z)
+    {
+        position.translate(x, y, z);
+    }
     public void draw(GL10 gl)
     {
         square.draw(gl, position.x, position.y, position.z);

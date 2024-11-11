@@ -32,7 +32,7 @@ public class BackgroundController
     };
     int[] backgroundTextureID = new int[1];
 
-    public BackgroundController(GL10 gl)
+    public BackgroundController()
     {
         // Setup vertex-array buffer. Vertices in float. An float has 4 bytes
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -47,14 +47,14 @@ public class BackgroundController
         texBuffer = tbb.asFloatBuffer();
         texBuffer.put(uvs);
         texBuffer.position(0);
-
-        // Gets an ID to reference the texture
-        gl.glGenTextures(1, backgroundTextureID, 0);
     }
 
     // Loads a texture to the background
     public void loadTexture(GL10 gl, Context context, int background)
     {
+        // Gets an ID to reference the texture
+        gl.glGenTextures(1, backgroundTextureID, 0);
+
         gl.glBindTexture(GL10.GL_TEXTURE_2D, backgroundTextureID[0]);
 
         // Set up texture filters

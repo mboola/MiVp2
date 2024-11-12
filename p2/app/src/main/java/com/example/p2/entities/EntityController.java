@@ -1,4 +1,4 @@
-package com.example.p2;
+package com.example.p2.entities;
 
 import java.util.LinkedList;
 import java.util.List;

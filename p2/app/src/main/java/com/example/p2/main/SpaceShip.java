@@ -1,9 +1,7 @@
-package com.example.p2;
+package com.example.p2.main;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
+import com.example.p2.Square;
+import com.example.p2.auxiliary.Vector3;
 
 import javax.microedition.khronos.opengles.GL10;
 

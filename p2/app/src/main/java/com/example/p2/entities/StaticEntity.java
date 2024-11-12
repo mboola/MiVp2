@@ -1,4 +1,6 @@
-package com.example.p2;
+package com.example.p2.entities;
+
+import com.example.p2.auxiliary.Vector3;
 
 public class StaticEntity extends Entity
 {

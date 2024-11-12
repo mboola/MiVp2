@@ -1,9 +1,12 @@
-package com.example.p2;
+package com.example.p2.main;
 
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.KeyEvent;
+
+import com.example.p2.auxiliary.GraphicStorage;
+import com.example.p2.auxiliary.TextureLinker;
 
 public class MainActivity extends Activity {
 
@@ -14,7 +17,6 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GLSurfaceView view = new GLSurfaceView(this);
-        TextureStorage.Initialize();
         renderer = new MyOpenGLRenderer(this);
         view.setRenderer(renderer);
         setContentView(view);

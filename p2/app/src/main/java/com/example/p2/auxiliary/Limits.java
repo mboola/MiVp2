@@ -1,4 +1,4 @@
-package com.example.p2;
+package com.example.p2.auxiliary;
 
 import java.util.List;
 

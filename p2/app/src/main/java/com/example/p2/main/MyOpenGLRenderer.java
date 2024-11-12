@@ -1,4 +1,4 @@
-package com.example.p2;
+package com.example.p2.main;
 
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -8,6 +8,11 @@ import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.view.KeyEvent;
+
+import com.example.p2.auxiliary.GraphicStorage;
+import com.example.p2.auxiliary.TextureLinker;
+import com.example.p2.auxiliary.Vector3;
+import com.example.p2.entities.EntityController;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -24,11 +29,6 @@ public class MyOpenGLRenderer implements Renderer {
 	{
 		this.context = context;
 		keysToHandle = new LinkedList<>();
-
-		//Create the objects used in the scene
-		background = new BackgroundController(new Vector3(0, 0.4f, -1), 2);
-		entityController = new EntityController();
-		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
 	}
 
 	/*
@@ -38,7 +38,13 @@ public class MyOpenGLRenderer implements Renderer {
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Image Background color
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0f);
-		background.loadTexture(gl, context);
+		TextureLinker.Initialize(gl);
+		GraphicStorage.Initialize(context);
+
+		//Create the objects used in the scene
+		background = new BackgroundController(new Vector3(0, 0.4f, -1), 2);
+		entityController = new EntityController();
+		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
 	}
 
 	@Override //???????
@@ -103,7 +109,7 @@ public class MyOpenGLRenderer implements Renderer {
 		gl.glLoadIdentity();
 
 		background.draw(gl);
-		entityController.update(gl);
+//		entityController.update(gl);
 		spaceShip.draw(gl);
 	}
 

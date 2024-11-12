@@ -58,71 +58,50 @@ public class Mesh
 
     public void draw(GL10 gl)
     {
-        // TODO : delete this and make the bottom work
-        if (true)
-        {
-            gl.glColor4f(1,1,1,0);
-            gl.glBindTexture(GL10.GL_TEXTURE_2D, TextureLinker.getTextureID(gl, textureID));
-
-            gl.glFrontFace(GL10.GL_CCW);    // Front face in counter-clockwise orientation
-            gl.glEnable(GL10.GL_CULL_FACE); // Enable cull face
-            gl.glCullFace(GL10.GL_BACK);    // Cull the back face (don't display)
-            gl.glEnable(GL10.GL_TEXTURE_2D);  // Enable texture
-
-            gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-            gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);  // Enable texture-coords-array
-            gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureCoordBuffer); // Define texture-coords buffer
-
-            // front
-            gl.glPushMatrix();
-            gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-            gl.glPopMatrix();
-
-            gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);  // Disable texture-coords-array (NEW)
-            gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-            gl.glDisable(GL10.GL_CULL_FACE);
-            gl.glDisable(GL10.GL_TEXTURE_2D);  // Enable texture (NEW));
-            return ;
-        }
+        gl.glColor4f(1,1,1,0);
 
         if (textureEnabled)
-        {
-            int texture = TextureLinker.getTextureID(gl, textureID);
-            gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);
-        }
+            gl.glBindTexture(GL10.GL_TEXTURE_2D, TextureLinker.getTextureID(gl, textureID));
+
+        gl.glFrontFace(GL10.GL_CCW);    // Front face in counter-clockwise orientation
+        gl.glEnable(GL10.GL_CULL_FACE); // Enable cull face
+        gl.glCullFace(GL10.GL_BACK);    // Cull the back face (don't display)
+        gl.glEnable(GL10.GL_TEXTURE_2D);  // Enable texture
 
         // Enabled the vertices buffer for writing and to be used during
         // rendering.
-        gl.glColor4f(1,1,1,1);
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        if(textureEnabled)
-            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-
-        gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 
         // Specifies the location and data format of an array of vertex
         // coordinates to use when rendering.
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 
-        gl.glPushMatrix();
-        if(textureEnabled && textureCoordBuffer != null)
-            gl.glTexCoordPointer(2, GL10.GL_FLOAT,0, textureCoordBuffer);
+        if(textureEnabled)
+            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
         if (normalBuffer != null)
-            gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBuffer);
+            gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 
+
+        if(textureEnabled && textureCoordBuffer != null)
+            gl.glTexCoordPointer(2, GL10.GL_FLOAT,0, textureCoordBuffer);
+        if (normalBuffer != null)
+            gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBuffer);
         if (indexBuffer != null)
             gl.glDrawElements(GL10.GL_TRIANGLES, numFaceIndexs, GL10.GL_UNSIGNED_SHORT, indexBuffer);
+        else
+            gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 
-        gl.glPopMatrix();
         // Disable the vertices buffer.
-        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-
         if(textureEnabled)
             gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 
-        gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
+        if (normalBuffer != null)
+            gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
+
+        gl.glDisable(GL10.GL_CULL_FACE);
+        gl.glDisable(GL10.GL_TEXTURE_2D);
     }
 
     public Mesh copy()

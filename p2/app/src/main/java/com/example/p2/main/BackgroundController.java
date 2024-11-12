@@ -56,13 +56,13 @@ public class BackgroundController
         textureBuffer.put(uvs);
         textureBuffer.position(0);
 
-        backgroundMesh = new Mesh(vertexBuffer, null, null, textureBuffer, 1, GraphicStorage.getTexture("background"));
+        backgroundMesh = new Mesh(vertexBuffer, null, null, textureBuffer, 2, GraphicStorage.getTexture("background"));
     }
 
     public void draw(GL10 gl)
     {
         gl.glPushMatrix();
-        //gl.glScalef(size, size, 1);
+        gl.glScalef(size, size, 1);
         gl.glTranslatef(position.x, position.y, position.z);
         backgroundMesh.draw(gl);
         gl.glPopMatrix();

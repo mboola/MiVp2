@@ -13,7 +13,7 @@ public class SpaceShip extends Entity
     public SpaceShip(Vector3 position)
     {
         this.position = position;
-        mesh = GraphicStorage.getMesh("armwing", "armwing");
+        mesh = GraphicStorage.getMesh("armwing", "armwing_texture");
     }
 
     public void move(float x, float y, float z)

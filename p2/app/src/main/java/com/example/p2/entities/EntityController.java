@@ -19,7 +19,7 @@ public class EntityController {
     }
 
     // Updates all entities inside controller
-    public void update(GL10 gl)
+    public void update()
     {
         // Checks if new entities must be created
         entityFactory.generateEntities(entities);
@@ -29,6 +29,13 @@ public class EntityController {
         {
             if (entity.update())
                 entities.remove(entity);
+        }
+    }
+    public void draw(GL10 gl)
+    {
+        for (IEntity entity : entities)
+        {
+            entity.draw(gl);
         }
     }
 }

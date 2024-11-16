@@ -14,8 +14,8 @@ public class BasicEntitySpawner implements IEntitySpawner
     public List<IEntity> spawn()
     {
         List<IEntity> entities = new ArrayList<>();
-        Mesh mesh = GraphicStorage.getMesh("armwing", "background");
-        entities.add(new StaticEntity(new Vector3(0, 0, 0)));
+        Mesh mesh = GraphicStorage.getMesh("static1", "static1_texture");
+        entities.add(new StaticEntity(new Vector3(0, 0, -9), mesh));
         return entities;
     }
 }

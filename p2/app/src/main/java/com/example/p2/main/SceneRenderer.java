@@ -25,6 +25,7 @@ public class SceneRenderer implements Renderer {
 	private SpaceShip spaceShip;
 	private Context context;
 	private Queue<Integer> keysToHandle;
+	private boolean gamePaused = false;
 	private boolean graphicsInitialized = false;
 	public SceneRenderer(Context context)
 	{
@@ -35,7 +36,7 @@ public class SceneRenderer implements Renderer {
 		GraphicStorage.Initialize(context);
 
 		// Create the objects used in the scene
-		background = new Background(new Vector3(0, 0.4f, -1), 2);
+		background = new Background(new Vector3(0, 0.4f, -10), 20);
 		entityController = new EntityController();
 		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
 	}
@@ -72,12 +73,12 @@ public class SceneRenderer implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
-		if (graphicsInitialized)
-		{
-			handleInput();
+		if (!graphicsInitialized)
+			return ;
+		handleInput();
+		if (!gamePaused)
 			updateEntities();
-			drawEntities(gl);
-		}
+		drawEntities(gl);
 	}
 
 	private void handleInput()
@@ -87,30 +88,33 @@ public class SceneRenderer implements Renderer {
 		while (!keysToHandle.isEmpty())
 		{
 			key = keysToHandle.remove();
-			switch (key)
+			if (key == KeyEvent.KEYCODE_SPACE){
+				gamePaused = !gamePaused;
+			}
+			else if (!gamePaused)
 			{
-				case KeyEvent.KEYCODE_W:
-					spaceShip.move(0, 0.2f, 0);
-					break;
-				case KeyEvent.KEYCODE_S:
-					spaceShip.move(0, -0.2f, 0);
-					break;
-				case KeyEvent.KEYCODE_A:
-					spaceShip.move(-0.2f, 0, 0);
-					break;
-				case KeyEvent.KEYCODE_D:
-					spaceShip.move(0.2f, 0, 0);
-					break;
-				case KeyEvent.KEYCODE_SPACE:
-					System.out.println("Works");
-					break;
+				switch (key)
+				{
+					case KeyEvent.KEYCODE_W:
+						spaceShip.move(0, 0.2f, 0);
+						break;
+					case KeyEvent.KEYCODE_S:
+						spaceShip.move(0, -0.2f, 0);
+						break;
+					case KeyEvent.KEYCODE_A:
+						spaceShip.move(-0.2f, 0, 0);
+						break;
+					case KeyEvent.KEYCODE_D:
+						spaceShip.move(0.2f, 0, 0);
+						break;
+				}
 			}
 		}
 	}
 
 	private void updateEntities()
 	{
-		// entityController.update(gl);
+		entityController.update();
 	}
 
 	// Elements must be rendered in order from farthest to nearest.
@@ -122,7 +126,7 @@ public class SceneRenderer implements Renderer {
 		gl.glLoadIdentity();
 
 		background.draw(gl);
-//		entityController.draw(gl);
+		entityController.draw(gl);
 		spaceShip.draw(gl);
 	}
 

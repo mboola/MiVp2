@@ -34,12 +34,14 @@ public class GraphicStorage
     private static void setTextures(Context context)
     {
         initializeTexture(context, "background", R.raw.background);
-        initializeTexture(context, "armwing", R.raw.texture_armwing);
+        initializeTexture(context, "armwing_texture", R.raw.armwing_texture);
+        initializeTexture(context, "static1_texture", R.raw.static1_texture);
     }
 
     private static void setMeshes(Context context)
     {
         initializeMesh(context, "armwing", R.raw.armwing);
+        initializeMesh(context, "static1", R.raw.static1);
     }
 
     private static void initializeTexture(Context context, String textureID, int filenameId)

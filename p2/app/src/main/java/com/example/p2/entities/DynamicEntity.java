@@ -16,7 +16,7 @@ public class DynamicEntity extends Entity
 
     @Override
     public void draw(GL10 gl) {
-
+        mesh.draw(gl);
     }
 
     @Override

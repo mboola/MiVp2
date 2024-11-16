@@ -11,7 +11,7 @@ public class RandomEntityFactory implements IEntityFactory
     private final List<IEntitySpawner> spawners;
     public RandomEntityFactory()
     {
-        this.maxUpdates = 1000;
+        this.maxUpdates = 100;
         updatesToNextEntity = 0;
         // initialize collection of entities
         spawners = new ArrayList<IEntitySpawner>();

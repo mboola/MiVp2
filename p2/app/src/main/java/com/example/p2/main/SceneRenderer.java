@@ -75,7 +75,8 @@ public class SceneRenderer implements Renderer {
 		if (graphicsInitialized)
 		{
 			handleInput();
-			drawElements(gl);
+			updateEntities();
+			drawEntities(gl);
 		}
 	}
 
@@ -107,8 +108,13 @@ public class SceneRenderer implements Renderer {
 		}
 	}
 
+	private void updateEntities()
+	{
+		// entityController.update(gl);
+	}
+
 	// Elements must be rendered in order from farthest to nearest.
-	private void drawElements(GL10 gl)
+	private void drawEntities(GL10 gl)
 	{
 		// Clears the screen and depth buffer.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -116,7 +122,7 @@ public class SceneRenderer implements Renderer {
 		gl.glLoadIdentity();
 
 		background.draw(gl);
-//		entityController.update(gl);
+//		entityController.draw(gl);
 		spaceShip.draw(gl);
 	}
 

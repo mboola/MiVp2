@@ -2,6 +2,8 @@ package com.example.p2.entities;
 
 import com.example.p2.auxiliary.Vector3;
 
+import javax.microedition.khronos.opengles.GL10;
+
 public class StaticEntity extends Entity
 {
     public StaticEntity(Vector3 position)
@@ -12,7 +14,13 @@ public class StaticEntity extends Entity
         return false;
     }
 
-    public void draw() {
+    @Override
+    public void draw(GL10 gl) {
 
+    }
+
+    @Override
+    protected boolean hasCollided(Vector3 position) {
+        return false;
     }
 }

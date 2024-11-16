@@ -34,6 +34,7 @@ public class GraphicStorage
     private static void setTextures(Context context)
     {
         initializeTexture(context, "background", R.raw.background);
+        initializeTexture(context, "armwing", R.raw.texture_armwing);
     }
 
     private static void setMeshes(Context context)

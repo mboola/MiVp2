@@ -1,26 +1,40 @@
 package com.example.p2.main;
 
 import com.example.p2.Square;
+import com.example.p2.auxiliary.GraphicStorage;
+import com.example.p2.auxiliary.Mesh;
 import com.example.p2.auxiliary.Vector3;
+import com.example.p2.entities.Entity;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class SpaceShip
+public class SpaceShip extends Entity
 {
-    private Vector3 position;
-    private Square square;
     public SpaceShip(Vector3 position)
     {
         this.position = position;
-        square = new Square();
+        mesh = GraphicStorage.getMesh("armwing", "armwing");
     }
 
     public void move(float x, float y, float z)
     {
         position.translate(x, y, z);
     }
+
+    public boolean update() {
+        return false;
+    }
+
     public void draw(GL10 gl)
     {
-        square.draw(gl, position.x, position.y, position.z);
+        gl.glPushMatrix();
+        gl.glTranslatef(position.x, position.y, position.z);
+        mesh.draw(gl);
+        gl.glPopMatrix();
+    }
+
+    @Override
+    protected boolean hasCollided(Vector3 position) {
+        return false;
     }
 }

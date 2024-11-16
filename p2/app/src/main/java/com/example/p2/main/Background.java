@@ -2,6 +2,7 @@ package com.example.p2.main;
 
 import com.example.p2.auxiliary.Mesh;
 import com.example.p2.auxiliary.Vector3;
+import com.example.p2.entities.Entity;
 
 import java.nio.FloatBuffer;
 import java.nio.ByteBuffer;
@@ -9,7 +10,7 @@ import java.nio.ByteOrder;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class Background
+public class Background extends Entity
 {
     private float[] vertices = { // Vertices for a face
             -1.0f, -1.0f, 0.0f,  // 0. left-bottom-front
@@ -24,9 +25,6 @@ public class Background
             0.0f, 0.0f,  // C. left-top (NEW)
             1.0f, 0.0f   // D. right-top (NEW)
     };
-
-    private final Mesh backgroundMesh;
-    private Vector3 position;
     private int size;
 
     public Background(Vector3 position, int size)
@@ -48,7 +46,7 @@ public class Background
         textureBuffer.put(uvs);
         textureBuffer.position(0);
 
-        backgroundMesh = new Mesh(vertexBuffer, null, null, textureBuffer, 2, "background");
+        mesh = new Mesh(vertexBuffer, null, null, textureBuffer, 2, "background");
     }
 
     public void draw(GL10 gl)
@@ -56,7 +54,17 @@ public class Background
         gl.glPushMatrix();
         gl.glScalef(size, size, 1);
         gl.glTranslatef(position.x, position.y, position.z);
-        backgroundMesh.draw(gl);
+        mesh.draw(gl);
         gl.glPopMatrix();
+    }
+
+    @Override
+    public boolean update() {
+        return false;
+    }
+
+    @Override
+    protected boolean hasCollided(Vector3 position) {
+        return false;
     }
 }

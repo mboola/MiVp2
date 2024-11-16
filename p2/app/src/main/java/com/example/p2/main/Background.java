@@ -1,23 +1,15 @@
 package com.example.p2.main;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.opengl.GLUtils;
-
-import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Mesh;
 import com.example.p2.auxiliary.Vector3;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class BackgroundController
+public class Background
 {
     private float[] vertices = { // Vertices for a face
             -1.0f, -1.0f, 0.0f,  // 0. left-bottom-front
@@ -37,7 +29,7 @@ public class BackgroundController
     private Vector3 position;
     private int size;
 
-    public BackgroundController(Vector3 position, int size)
+    public Background(Vector3 position, int size)
     {
         this.position = position;
         this.size = size;
@@ -56,7 +48,7 @@ public class BackgroundController
         textureBuffer.put(uvs);
         textureBuffer.position(0);
 
-        backgroundMesh = new Mesh(vertexBuffer, null, null, textureBuffer, 2, GraphicStorage.getTexture("background"));
+        backgroundMesh = new Mesh(vertexBuffer, null, null, textureBuffer, 2, "background");
     }
 
     public void draw(GL10 gl)

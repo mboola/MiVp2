@@ -17,18 +17,27 @@ import com.example.p2.entities.EntityController;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class MyOpenGLRenderer implements Renderer {
+public class SceneRenderer implements Renderer {
 
 	//
 	private EntityController entityController;
-	private BackgroundController background;
+	private Background background;
 	private SpaceShip spaceShip;
 	private Context context;
 	private Queue<Integer> keysToHandle;
-	public MyOpenGLRenderer(Context context)
+	private boolean graphicsInitialized = false;
+	public SceneRenderer(Context context)
 	{
 		this.context = context;
 		keysToHandle = new LinkedList<>();
+
+		// Initialize all graphics (meshes and textures)
+		GraphicStorage.Initialize(context);
+
+		// Create the objects used in the scene
+		background = new Background(new Vector3(0, 0.4f, -1), 2);
+		entityController = new EntityController();
+		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
 	}
 
 	/*
@@ -39,12 +48,7 @@ public class MyOpenGLRenderer implements Renderer {
 		// Image Background color
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0f);
 		TextureLinker.Initialize(gl);
-		GraphicStorage.Initialize(context);
-
-		//Create the objects used in the scene
-		background = new BackgroundController(new Vector3(0, 0.4f, -1), 2);
-		entityController = new EntityController();
-		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
+		graphicsInitialized = true;
 	}
 
 	@Override //???????
@@ -68,8 +72,11 @@ public class MyOpenGLRenderer implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
-		handleInput();
-		drawElements(gl);
+		if (graphicsInitialized)
+		{
+			handleInput();
+			drawElements(gl);
+		}
 	}
 
 	private void handleInput()

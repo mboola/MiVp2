@@ -5,19 +5,16 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
-import com.example.p2.auxiliary.GraphicStorage;
-import com.example.p2.auxiliary.TextureLinker;
-
 public class MainActivity extends Activity {
 
-    private MyOpenGLRenderer renderer;
+    private SceneRenderer renderer;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GLSurfaceView view = new GLSurfaceView(this);
-        renderer = new MyOpenGLRenderer(this);
+        renderer = new SceneRenderer(this);
         view.setRenderer(renderer);
         setContentView(view);
     }

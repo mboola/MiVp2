@@ -29,7 +29,7 @@ public class Mesh
     private final FloatBuffer textureCoordBuffer;
     private final int numFaceIndexs;
     private boolean textureEnabled;
-    private int textureID;
+    private String textureID;
 
     public Mesh(FloatBuffer vertexBuffer, FloatBuffer normalBuffer,
                 ShortBuffer indexBuffer, FloatBuffer textureCoordBuffer,
@@ -45,7 +45,7 @@ public class Mesh
 
     public Mesh(FloatBuffer vertexBuffer, FloatBuffer normalBuffer,
                 ShortBuffer indexBuffer, FloatBuffer textureCoordBuffer,
-                int numFaceIndexs, int textureID)
+                int numFaceIndexs, String textureID)
     {
         this.vertexBuffer = vertexBuffer;
         this.normalBuffer = normalBuffer;
@@ -104,8 +104,8 @@ public class Mesh
         gl.glDisable(GL10.GL_TEXTURE_2D);
     }
 
-    public Mesh copy()
+    public Mesh copy(String newTexture)
     {
-        return new Mesh(vertexBuffer, normalBuffer, indexBuffer, textureCoordBuffer, numFaceIndexs);
+        return new Mesh(vertexBuffer, normalBuffer, indexBuffer, textureCoordBuffer, numFaceIndexs, newTexture);
     }
 }

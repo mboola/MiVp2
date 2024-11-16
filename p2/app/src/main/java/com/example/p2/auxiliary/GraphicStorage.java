@@ -19,28 +19,37 @@ import java.util.Map;
 
 public class GraphicStorage
 {
-    private static Map<String, Integer> textures;
-    private static Map<Integer, Bitmap> texturesBitmaps;
+    private static Map<String, Bitmap> textures;
     private static Map<String, Mesh> meshes;
     public static void Initialize(Context context)
     {
         // Here initialize all the textures and meshes
-        textures = new HashMap<>();
-        meshes = new HashMap<>();
-        texturesBitmaps = new HashMap<Integer, Bitmap>();
-        textures.put("background", R.raw.background);
-        registerTexture(context, R.raw.background);
+        textures = new HashMap<String, Bitmap>();
+        meshes = new HashMap<String, Mesh>();
+
+        setTextures(context);
+        setMeshes(context);
     }
 
-    private static void registerTexture(Context context, int textureID)
+    private static void setTextures(Context context)
     {
-        InputStream istream = context.getResources().openRawResource(textureID);
+        initializeTexture(context, "background", R.raw.background);
+    }
+
+    private static void setMeshes(Context context)
+    {
+        initializeMesh(context, "armwing", R.raw.armwing);
+    }
+
+    private static void initializeTexture(Context context, String textureID, int filenameId)
+    {
+        InputStream istream = context.getResources().openRawResource(filenameId);
 
         Bitmap bitmap;
         try {
             // Read and decode input as bitmap
             bitmap = BitmapFactory.decodeStream(istream);
-            texturesBitmaps.put(textureID, bitmap);
+            textures.put(textureID, bitmap);
         } finally {
             try {
                 istream.close();
@@ -51,7 +60,7 @@ public class GraphicStorage
         }
     }
 
-    private static Mesh loadMesh(Context context, int filenameId)
+    private static void initializeMesh(Context context, String meshID, int filenameId)
     {
         String line;
         String[] tmp,ftmp;
@@ -162,21 +171,18 @@ public class GraphicStorage
         }
         indexBuffer.position(0);
 
-        return new Mesh(vertexBuffer, normalBuffer, indexBuffer, textureCoordBuffer, numFaceIndexs);
+        Mesh mesh = new Mesh(vertexBuffer, normalBuffer, indexBuffer, textureCoordBuffer, numFaceIndexs);
+
+        meshes.put(meshID, mesh);
     }
 
-    public static Integer getTexture(String id)
+    public static Bitmap getTextureBitmap(String id)
     {
         return textures.get(id);
     }
 
-    public static Bitmap getTextureBitmap(int id)
+    public static Mesh getMesh(String idMesh, String idTexture)
     {
-        return texturesBitmaps.get(id);
-    }
-
-    public static Mesh getMesh(String id)
-    {
-        return meshes.get(id).copy();
+        return meshes.get(idMesh).copy(idTexture);
     }
 }

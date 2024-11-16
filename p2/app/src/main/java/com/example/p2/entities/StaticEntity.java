@@ -11,4 +11,8 @@ public class StaticEntity extends Entity
     public boolean update() {
         return false;
     }
+
+    public void draw() {
+
+    }
 }

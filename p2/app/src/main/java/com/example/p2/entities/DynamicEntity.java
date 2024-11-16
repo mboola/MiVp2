@@ -11,4 +11,9 @@ public class DynamicEntity extends Entity
     public boolean update() {
         return false;
     }
+
+    @Override
+    public void draw() {
+
+    }
 }

@@ -1,19 +1,23 @@
 package com.example.p2.auxiliary;
 
-import java.util.List;
-
 public class Limits
 {
     private final static float minX = 10f;
     private final static float minY = 10f;
-    private final static float minZ = 10f;
+    private final static float farZ = -10f;
     private final static float maxX = 10f;
-    private final static float maxY = 10f;
-    private final static float maxZ = 10f;
+    private final static float maxY = -10f;
+    private final static float nearZ = 0f;
 
-    public static float[] getLimits()
+    public static boolean outOfLimits(Vector3 position)
     {
-        float[] limits = {minX, minY, minZ, maxX, maxY, maxZ};
-        return limits;
+        if (position.z < farZ || position.z > nearZ)
+            return true;
+        return false;
+    }
+
+    public static float getFarZ()
+    {
+        return farZ;
     }
 }

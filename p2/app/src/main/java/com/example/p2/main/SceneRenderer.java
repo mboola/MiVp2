@@ -36,7 +36,7 @@ public class SceneRenderer implements Renderer {
 		GraphicStorage.Initialize(context);
 
 		// Create the objects used in the scene
-		background = new Background(new Vector3(0, 0.4f, -10), 20);
+		background = new Background(new Vector3(0, 0.4f, -10), 20, 8);
 		entityController = new EntityController();
 		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
 	}
@@ -115,6 +115,7 @@ public class SceneRenderer implements Renderer {
 	private void updateEntities()
 	{
 		entityController.update();
+		background.update();
 	}
 
 	// Elements must be rendered in order from farthest to nearest.

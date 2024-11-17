@@ -1,5 +1,6 @@
 package com.example.p2.entities;
 
+import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.Mesh;
 import com.example.p2.auxiliary.Vector3;
 
@@ -18,7 +19,7 @@ public abstract class Entity implements IEntity
     public boolean update()
     {
         position.z += 0.1f;
-        return position.z > 1f;
+        return Limits.outOfLimits(position);
     }
     public void draw(GL10 gl)
     {

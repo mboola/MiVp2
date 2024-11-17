@@ -1,54 +1,43 @@
 package com.example.p2.main;
 
+import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Mesh;
+import com.example.p2.auxiliary.MeshFactory;
 import com.example.p2.auxiliary.Vector3;
+import com.example.p2.entities.DotEntity;
 import com.example.p2.entities.Entity;
+import com.example.p2.entities.IEntity;
+import com.example.p2.entities.StaticEntity;
 
 import java.nio.FloatBuffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 import javax.microedition.khronos.opengles.GL10;
 
 public class Background extends Entity
 {
-    private float[] vertices = { // Vertices for a face
-            -1.0f, -1.0f, 0.0f,  // 0. left-bottom-front
-            1.0f, -1.0f, 0.0f,  // 1. right-bottom-front
-            -1.0f,  1.0f, 0.0f,  // 2. left-top-front
-            1.0f,  1.0f, 0.0f   // 3. right-top-front
-    };
+    private final int size;
+    private final IEntity[] dots;
 
-    float[] uvs = { // Texture coords for the above face (NEW)
-            0.0f, 1.0f,  // A. left-bottom (NEW)
-            1.0f, 1.0f,  // B. right-bottom (NEW)
-            0.0f, 0.0f,  // C. left-top (NEW)
-            1.0f, 0.0f   // D. right-top (NEW)
-    };
-    private int size;
-
-    public Background(Vector3 position, int size)
+    public Background(Vector3 position, int size, int dotsLength)
     {
         this.position = position;
         this.size = size;
-
-        // Setup vertex-array buffer. Vertices in float. An float has 4 bytes
-        ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
-        vbb.order(ByteOrder.nativeOrder()); // Use native byte order
-        FloatBuffer vertexBuffer = vbb.asFloatBuffer(); // Convert from byte to float
-        vertexBuffer.put(vertices);         // Copy data into buffer
-        vertexBuffer.position(0);           // Rewind
-
-        // Setup texture-coords-array buffer, in float. An float has 4 bytes (NEW)
-        ByteBuffer tbb = ByteBuffer.allocateDirect(uvs.length * 4);
-        tbb.order(ByteOrder.nativeOrder());
-        FloatBuffer textureBuffer = tbb.asFloatBuffer();
-        textureBuffer.put(uvs);
-        textureBuffer.position(0);
-
-        mesh = new Mesh(vertexBuffer, null, null, textureBuffer, 2, "background");
+        dots = new IEntity[dotsLength];
+        int offset = -1;
+        for (int i = 0; i < dotsLength; i++)
+        {
+            dots[i] = new DotEntity(new Vector3(0, 0, (float) (i * offset)), GraphicStorage.getMesh("dots", "base_texture"));
+        }
+        mesh = MeshFactory.createMesh("background");
     }
 
+    @Override
     public void draw(GL10 gl)
     {
         gl.glPushMatrix();
@@ -56,10 +45,14 @@ public class Background extends Entity
         gl.glTranslatef(position.x, position.y, position.z);
         mesh.draw(gl);
         gl.glPopMatrix();
+
+        for (IEntity dot : dots) dot.draw(gl);
     }
 
     @Override
-    public boolean update() {
+    public boolean update()
+    {
+        for (IEntity dot : dots) dot.update();
         return false;
     }
 

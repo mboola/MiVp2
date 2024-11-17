@@ -2,12 +2,12 @@ package com.example.p2.auxiliary;
 
 public class Limits
 {
-    private final static float minX = 10f;
-    private final static float minY = 10f;
-    private final static float farZ = -10f;
-    private final static float maxX = 10f;
-    private final static float maxY = -10f;
-    private final static float nearZ = 0f;
+    private final static float minX = -10;
+    private final static float minY = 0;
+    private final static float farZ = -10;
+    private final static float maxX = 10;
+    private final static float maxY = 10;
+    private final static float nearZ = 0;
 
     public static boolean outOfLimits(Vector3 position)
     {

@@ -10,6 +10,7 @@ import android.opengl.GLU;
 import android.view.KeyEvent;
 
 import com.example.p2.auxiliary.GraphicStorage;
+import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.TextureLinker;
 import com.example.p2.auxiliary.Vector3;
 import com.example.p2.entities.EntityController;
@@ -17,15 +18,16 @@ import com.example.p2.entities.EntityController;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class SceneRenderer implements Renderer {
-
-	//
+public class SceneRenderer implements Renderer
+{
 	private EntityController entityController;
 	private Background background;
 	private SpaceShip spaceShip;
+	private Hud hud;
 	private Context context;
 	private Queue<Integer> keysToHandle;
 	private boolean gamePaused = false;
+	private boolean cameraChanged = false;
 	private boolean graphicsInitialized = false;
 	public SceneRenderer(Context context)
 	{
@@ -36,16 +38,18 @@ public class SceneRenderer implements Renderer {
 		GraphicStorage.Initialize(context);
 
 		// Create the objects used in the scene
-		background = new Background(new Vector3(0, 0.4f, -10), 20, 8);
+		background = new Background(new Vector3(0, 0.4f, Limits.getFarZ()), 20, 10);
 		entityController = new EntityController();
-		spaceShip = new SpaceShip(new Vector3(0, 0, -2));
+		spaceShip = new SpaceShip(new Vector3(0, 1, -2));
+		hud = new Hud(this);
 	}
 
 	/*
 	 *	Called when the app starts or when the app goes background
 	 * 	and then comes back and needs to be recreated.
 	 */
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+	public void onSurfaceCreated(GL10 gl, EGLConfig config)
+	{
 		// Image Background color
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0f);
 		TextureLinker.Initialize(gl);
@@ -53,8 +57,8 @@ public class SceneRenderer implements Renderer {
 	}
 
 	@Override //???????
-	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		// Define the Viewport
+	public void onSurfaceChanged(GL10 gl, int width, int height)
+	{
 		gl.glViewport(0, 0, width, height);
 		// Select the projection matrix
 		gl.glMatrixMode(GL10.GL_PROJECTION);
@@ -91,10 +95,10 @@ public class SceneRenderer implements Renderer {
 			if (key == KeyEvent.KEYCODE_SPACE){
 				gamePaused = !gamePaused;
 			}
-			else if (!gamePaused)
-			{
-				switch (key)
-				{
+			else if (key == KeyEvent.KEYCODE_C) {
+				cameraChanged = !cameraChanged;
+			} else if (!gamePaused) {
+				switch (key) {
 					case KeyEvent.KEYCODE_W:
 						spaceShip.move(0, 0.2f, 0);
 						break;
@@ -116,19 +120,27 @@ public class SceneRenderer implements Renderer {
 	{
 		entityController.update();
 		background.update();
+		hud.update();
 	}
 
 	// Elements must be rendered in order from farthest to nearest.
 	private void drawEntities(GL10 gl)
 	{
 		// Clears the screen and depth buffer.
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
 		gl.glLoadIdentity();
 
+		if (cameraChanged)
+			GLU.gluLookAt(gl, -10, 10, -5, 0f, 0f, -5f, 0f, 1f, 0f);
+
+		gl.glPushMatrix();
 		background.draw(gl);
 		entityController.draw(gl);
 		spaceShip.draw(gl);
+		gl.glPopMatrix();
+
+		//hud.draw(gl);
 	}
 
 	/*

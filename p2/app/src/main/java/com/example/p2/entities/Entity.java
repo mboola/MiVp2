@@ -13,7 +13,6 @@ public abstract class Entity implements IEntity
 {
     protected Vector3 position;
     protected Mesh mesh;
-    protected int idTexture;
     abstract protected boolean hasCollided(Vector3 position);
 
     public boolean update()

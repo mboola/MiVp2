@@ -53,40 +53,40 @@ public class Mesh
         this.textureCoordBuffer = textureCoordBuffer;
         this.numFaceIndexs = numFaceIndexs;
         this.textureID = textureID;
-        textureEnabled = true;
+        if (textureCoordBuffer != null)
+            textureEnabled = true;
     }
 
     public void draw(GL10 gl)
     {
-        gl.glColor4f(1,1,1,0);
+        gl.glColor4f(1,1,1,1);
 
         if (textureEnabled)
+        {
             gl.glBindTexture(GL10.GL_TEXTURE_2D, TextureLinker.getTextureID(gl, textureID));
+            gl.glEnable(GL10.GL_TEXTURE_2D);  // Enable texture
+        }
 
         gl.glFrontFace(GL10.GL_CCW);    // Front face in counter-clockwise orientation
         gl.glEnable(GL10.GL_CULL_FACE); // Enable cull face
         gl.glCullFace(GL10.GL_BACK);    // Cull the back face (don't display)
-        gl.glEnable(GL10.GL_TEXTURE_2D);  // Enable texture
 
-        // Enabled the vertices buffer for writing and to be used during
-        // rendering.
+        // Enabled the vertices buffer for writing and to be used during rendering.
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-
-        // Specifies the location and data format of an array of vertex
-        // coordinates to use when rendering.
+        // Specifies the location and data format of an array of vertex coordinates to use when rendering.
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 
         if(textureEnabled)
+        {
             gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-
-        if (normalBuffer != null)
-            gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-
-
-        if(textureEnabled && textureCoordBuffer != null)
             gl.glTexCoordPointer(2, GL10.GL_FLOAT,0, textureCoordBuffer);
+        }
+
         if (normalBuffer != null)
+        {
+            gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
             gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBuffer);
+        }
         if (indexBuffer != null)
             gl.glDrawElements(GL10.GL_TRIANGLES, numFaceIndexs, GL10.GL_UNSIGNED_SHORT, indexBuffer);
         else
@@ -94,14 +94,16 @@ public class Mesh
 
         // Disable the vertices buffer.
         if(textureEnabled)
+        {
             gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+            gl.glDisable(GL10.GL_TEXTURE_2D);
+        }
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 
         if (normalBuffer != null)
             gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
 
         gl.glDisable(GL10.GL_CULL_FACE);
-        gl.glDisable(GL10.GL_TEXTURE_2D);
     }
 
     public Mesh copy(String newTexture)

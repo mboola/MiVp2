@@ -27,6 +27,10 @@ public class MeshFactory {
             0.0f, 0.0f,  // C. left-top (NEW)
             1.0f, 0.0f   // D. right-top (NEW)
     };
+
+    /*
+     *  Used to create a Quad with the textureID. Used in the background.
+     */
     public static Mesh createMesh(String textureID)
     {
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -44,6 +48,10 @@ public class MeshFactory {
 
         return new Mesh(vertexBuffer, null, null, textureBuffer, 2, textureID);
     }
+
+    /*
+     *  Used to create a mesh located in a filenameId.
+     */
     public static Mesh createMesh(Context context, int filenameId) throws IOException
     {
         String line;
@@ -95,7 +103,6 @@ public class MeshFactory {
                 }
             }
         }
-
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(vindex.size() * 4 * 3);
         vbb.order(ByteOrder.nativeOrder());

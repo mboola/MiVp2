@@ -23,11 +23,11 @@ public class SceneRenderer implements Renderer
 	private EntityController entityController;
 	private Background background;
 	private SpaceShip spaceShip;
+	private CameraView camera;
 	private Hud hud;
 	private Context context;
 	private Queue<Integer> keysToHandle;
 	private boolean gamePaused = false;
-	private boolean cameraChanged = false;
 	private boolean graphicsInitialized = false;
 	public SceneRenderer(Context context)
 	{
@@ -38,6 +38,7 @@ public class SceneRenderer implements Renderer
 		GraphicStorage.Initialize(context);
 
 		// Create the objects used in the scene
+		camera = new CameraView();
 		background = new Background(new Vector3(0, 0.4f, Limits.getFarZ()), 20, 10);
 		entityController = new EntityController();
 		spaceShip = new SpaceShip(new Vector3(0, 1, -2));
@@ -96,7 +97,7 @@ public class SceneRenderer implements Renderer
 				gamePaused = !gamePaused;
 			}
 			else if (key == KeyEvent.KEYCODE_C) {
-				cameraChanged = !cameraChanged;
+				camera.changeView();
 			} else if (!gamePaused) {
 				switch (key) {
 					case KeyEvent.KEYCODE_W:
@@ -119,6 +120,7 @@ public class SceneRenderer implements Renderer
 	private void updateEntities()
 	{
 		entityController.update();
+		spaceShip.update();
 		background.update();
 		hud.update();
 	}
@@ -131,8 +133,7 @@ public class SceneRenderer implements Renderer
 
 		gl.glLoadIdentity();
 
-		if (cameraChanged)
-			GLU.gluLookAt(gl, -10, 10, -5, 0f, 0f, -5f, 0f, 1f, 0f);
+		camera.draw(gl);
 
 		gl.glPushMatrix();
 		background.draw(gl);

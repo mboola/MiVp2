@@ -34,7 +34,7 @@ public class GraphicStorage
     private static void setTextures(Context context)
     {
         initializeTexture(context, "background", R.raw.background);
-        initializeTexture(context, "armwing_texture", R.raw.base_texture);
+        initializeTexture(context, "armwing_texture", R.raw.armwing_texture);
         initializeTexture(context, "static1_texture", R.raw.base_texture);
         initializeTexture(context, "base_texture", R.raw.base_texture);
     }
@@ -46,6 +46,11 @@ public class GraphicStorage
         initializeMesh(context, "static1", R.raw.static1);
     }
 
+    /*
+     *  Searches in resources/raw a texture named "filenameID" and generates a bitmap.
+     *  Stores it inside a dictionary with the key textureID.
+     *  Throws NotFoundException if it does not find it. Not handled bc it needs to break.
+     */
     private static void initializeTexture(Context context, String textureID, int filenameId)
     {
         InputStream istream = context.getResources().openRawResource(filenameId);
@@ -59,11 +64,11 @@ public class GraphicStorage
             try {
                 istream.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
     }
+
 
     private static void initializeMesh(Context context, String meshID, int filenameId)
     {
@@ -79,11 +84,13 @@ public class GraphicStorage
 
     public static Bitmap getTextureBitmap(String id)
     {
+        if (!textures.containsKey(id)) System.out.println("Texture " + id + " not found in textures.");
         return textures.get(id);
     }
 
     public static Mesh getMesh(String idMesh, String idTexture)
     {
+        if (!meshes.containsKey(idMesh)) System.out.println("Texture " + idMesh + " not found in meshes.");
         return meshes.get(idMesh).copy(idTexture);
     }
 }

@@ -10,8 +10,10 @@ import javax.microedition.khronos.opengles.GL10;
 public class SpaceShip extends Entity
 {
     private SpaceShipAnimation animation;
-    public SpaceShip(Vector3 position)
+    private CameraView camera;
+    public SpaceShip(Vector3 position, CameraView camera)
     {
+        this.camera = camera;
         this.position = position;
         animation = new SpaceShipAnimation();
         mesh = GraphicStorage.getMesh("armwing", "armwing_texture");
@@ -23,8 +25,19 @@ public class SpaceShip extends Entity
         float final_y = position.y + y;
         if (final_x < Limits.getMaxX() && final_x > Limits.getMinX())
             position.x = final_x;
-        if (final_y < Limits.getMaxY() && final_y > Limits.getMinY())
+        if (position.x > 2)
+            camera.setCameraX(final_x - 1f);
+        else if (position.x < -2)
+            camera.setCameraX(final_x + 1f);
+        else
+            camera.setCameraX(final_x /2);
+        if (final_y < Limits.getMaxY() && final_y > Limits.getMinY() - 0.45f)
             position.y = final_y;
+    }
+
+    public Vector3 getPosition()
+    {
+        return position;
     }
 
     public boolean update()

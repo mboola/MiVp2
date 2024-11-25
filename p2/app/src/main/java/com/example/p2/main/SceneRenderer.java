@@ -25,23 +25,21 @@ public class SceneRenderer implements Renderer
 	private SpaceShip spaceShip;
 	private CameraView camera;
 	private Hud hud;
-	private Context context;
 	private Queue<Integer> keysToHandle;
 	private boolean gamePaused = false;
 	private boolean graphicsInitialized = false;
 	public SceneRenderer(Context context)
 	{
-		this.context = context;
 		keysToHandle = new LinkedList<>();
 
 		// Initialize all graphics (meshes and textures)
 		GraphicStorage.Initialize(context);
 
-		// Create the objects used in the scene
 		camera = new CameraView();
+		// Create the objects used in the scene
 		background = new Background(new Vector3(0, 0.4f, Limits.getFarZ()), 20, 10);
 		entityController = new EntityController();
-		spaceShip = new SpaceShip(new Vector3(0, 1, -2));
+		spaceShip = new SpaceShip(new Vector3(0, 0, -1.8f), camera);
 		hud = new Hud(this);
 	}
 
@@ -101,15 +99,19 @@ public class SceneRenderer implements Renderer
 			} else if (!gamePaused) {
 				switch (key) {
 					case KeyEvent.KEYCODE_W:
+						camera.setLastKey(KeyEvent.KEYCODE_W);
 						spaceShip.move(0, 0.2f, 0);
 						break;
 					case KeyEvent.KEYCODE_S:
+						camera.setLastKey(KeyEvent.KEYCODE_S);
 						spaceShip.move(0, -0.2f, 0);
 						break;
 					case KeyEvent.KEYCODE_A:
+						camera.setLastKey(KeyEvent.KEYCODE_A);
 						spaceShip.move(-0.2f, 0, 0);
 						break;
 					case KeyEvent.KEYCODE_D:
+						camera.setLastKey(KeyEvent.KEYCODE_D);
 						spaceShip.move(0.2f, 0, 0);
 						break;
 				}
@@ -119,6 +121,8 @@ public class SceneRenderer implements Renderer
 
 	private void updateEntities()
 	{
+		camera.update();
+
 		entityController.update();
 		spaceShip.update();
 		background.update();

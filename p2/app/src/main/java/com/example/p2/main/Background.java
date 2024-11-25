@@ -1,6 +1,7 @@
 package com.example.p2.main;
 
 import com.example.p2.auxiliary.GraphicStorage;
+import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.Mesh;
 import com.example.p2.auxiliary.MeshFactory;
 import com.example.p2.auxiliary.Vector3;
@@ -32,7 +33,7 @@ public class Background extends Entity
         int offset = -1;
         for (int i = 0; i < dotsLength; i++)
         {
-            dots[i] = new DotEntity(new Vector3(0, 0, (float) (i * offset)), GraphicStorage.getMesh("dots", "base_texture"));
+            dots[i] = new DotEntity(new Vector3(0, Limits.getSpawnY(), (float) (i * offset)), GraphicStorage.getMesh("dots", "base_texture"));
         }
         mesh = MeshFactory.createMesh("background");
     }

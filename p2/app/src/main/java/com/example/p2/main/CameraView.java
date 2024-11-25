@@ -1,7 +1,9 @@
 package com.example.p2.main;
 
 import android.opengl.GLU;
+import android.view.KeyEvent;
 
+import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.Vector3;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -12,22 +14,105 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class CameraView
 {
-    private Vector3 eye;
-    private Vector3 center;
-    private Vector3 up;
-    private boolean followsShip = false;
+    private final Vector3 outsideEye;
+    private final Vector3 outsideCenter;
+    private final Vector3 outsideUp;
+    private final Vector3 baseEye;
+    private final Vector3 baseCenter;
+    private final Vector3 baseUp;
+    private Vector3 modificationEye;
+    private Vector3 modificationCenter;
+    private Vector3 modificationUp;
+    private boolean followsShip = true;
+    private int lastKey;
+    private int framesKeyPulsed;
 
     public CameraView()
     {
-        eye = new Vector3(-10, 10, -5);
-        center = new Vector3(0, 0, -5);
-        up = new Vector3(0, 1, 0);
+        lastKey = -1;
+        framesKeyPulsed = -1;
+        outsideEye = new Vector3(-10, 10, -5);
+        outsideCenter = new Vector3(0, 0, -5);
+        outsideUp = new Vector3(0, 1, 0);
+        baseEye = new Vector3(0, 0, 0.5f);
+        baseCenter = new Vector3(0, 0, -5);
+        baseUp = new Vector3(0, 1, 0);
+        modificationEye = new Vector3(0,0,0);
+        modificationCenter = new Vector3(0, 0, 0);
+        modificationUp = new Vector3(0, 0, 0);
+    }
+
+    public void setLastKey(int lastKey)
+    {
+        this.lastKey = lastKey;
+        framesKeyPulsed = 0;
+    }
+
+    public void update()
+    {
+        if (framesKeyPulsed == -1)
+        {
+            // If a movement key is not being pressed and camera has an inclination
+            // return slowly to neutral camera (lineally)
+            if (modificationUp.x > 0)
+            {
+                modificationUp.x -= 0.005f;
+                if (modificationUp.x < 0)
+                    modificationUp.x = 0;
+            }
+            else if (modificationUp.x < 0)
+            {
+                modificationUp.x += 0.005f;
+                if (modificationUp.x > 0)
+                    modificationUp.x = 0;
+            }
+            return ;
+        }
+        else
+        {
+            framesKeyPulsed++;
+            if (framesKeyPulsed >= 30)
+                framesKeyPulsed = -1;
+        }
+
+        switch (lastKey) {
+            case KeyEvent.KEYCODE_W:
+                break;
+            case KeyEvent.KEYCODE_S:
+                break;
+            case KeyEvent.KEYCODE_A: // Left
+                if (modificationUp.x > -0.15f)
+                    modificationUp.x -= 0.01f;
+                else
+                    modificationUp.x = -0.15f;
+                break;
+            case KeyEvent.KEYCODE_D:
+                if (modificationUp.x < 0.15f)
+                    modificationUp.x += 0.01f;
+                else
+                    modificationUp.x = 0.15f;
+                break;
+        }
+
+        // If a key is being pressed, go to that inclination
+        // (if left rotate L -15º, right rotate R15º)
+        // also translate the camera with the object (and rotate object, but it is something spaceship will do)
+    }
+
+    public void setCameraX(float x)
+    {
+        modificationEye.x = x;
+        modificationCenter.x = x;
     }
 
     public void draw(GL10 gl)
     {
         if (followsShip)
-            GLU.gluLookAt(gl, eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, eye.z);
+            GLU.gluLookAt(gl, baseEye.x + modificationEye.x, baseEye.y + modificationEye.y, baseEye.z + modificationEye.z,
+                    baseCenter.x + modificationCenter.x, baseCenter.y + modificationCenter.y, baseCenter.z + modificationCenter.z,
+                    baseUp.x + modificationUp.x, baseUp.y + modificationUp.y, baseUp.z + modificationUp.z);
+        else
+            GLU.gluLookAt(gl, outsideEye.x, outsideEye.y, outsideEye.z, outsideCenter.x, outsideCenter.y, outsideCenter.z, outsideUp.x, outsideUp.y, outsideUp.z);
     }
 
     public void changeView()

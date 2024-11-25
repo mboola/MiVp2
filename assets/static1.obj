@@ -1,5 +1,6 @@
 # Blender 4.2.1 LTS
 # www.blender.org
+mtllib static1.mtl
 o Cube
 v 0.200000 0.400135 -0.200000
 v 0.200000 0.000135 -0.200000

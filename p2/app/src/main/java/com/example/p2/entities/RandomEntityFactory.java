@@ -8,14 +8,14 @@ public class RandomEntityFactory implements IEntityFactory
 {
     private int updatesToNextEntity;
     private final int maxUpdates;
-    private final List<IEntitySpawner> spawners;
+    private final List<EntityGenerator> spawners;
     public RandomEntityFactory()
     {
         this.maxUpdates = 100;
         updatesToNextEntity = 0;
         // initialize collection of entities
-        spawners = new ArrayList<IEntitySpawner>();
-        spawners.add(new BasicEntitySpawner());
+        spawners = new ArrayList<EntityGenerator>();
+        spawners.add(new BasicEntityGenerator());
     }
     public void generateEntities(List<IEntity> entities)
     {

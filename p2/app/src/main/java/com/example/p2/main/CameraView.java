@@ -105,6 +105,12 @@ public class CameraView
         modificationCenter.x = x;
     }
 
+    public void setCameraY(float y)
+    {
+        modificationEye.y = y;
+        modificationCenter.y = y;
+    }
+
     public void draw(GL10 gl)
     {
         if (followsShip)

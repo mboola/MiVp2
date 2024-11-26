@@ -25,8 +25,9 @@ public class Background extends Entity
     private final int size;
     private final IEntity[] dots;
 
-    public Background(Vector3 position, int size, int dotsLength)
+    public Background(Vector3 position, int size)
     {
+        int dotsLength = (int) Math.abs(Limits.getFarZ());
         this.position = position;
         this.size = size;
         dots = new IEntity[dotsLength];

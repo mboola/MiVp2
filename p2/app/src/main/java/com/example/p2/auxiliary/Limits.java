@@ -6,7 +6,7 @@ public class Limits
 {
     private final static float minX = -7;
     private final static float minY = -0.2f;
-    private final static float farZ = -10;
+    private final static float farZ = -15;
     private final static float maxX = 7;
     private final static float maxY = 2.8f;
     private final static float nearZ = 1;

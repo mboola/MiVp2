@@ -22,7 +22,8 @@ public class TextureLinker
         int[] maxTextureUnits = new int[1];
         // Im not sure if this returns the max or not, but there must be a max somewhere and I want to
         // control it so the program does not brake.
-        gl.glGetIntegerv(GL10.GL_MAX_TEXTURE_UNITS, maxTextureUnits, 0);
+        //gl.glGetIntegerv(GL10.GL_MAX_TEXTURE_UNITS, maxTextureUnits, 0);
+        maxTextureUnits[0] = 10;
         loadedTexturesGPU = new int[maxTextureUnits[0]];
         texturesUsed = new String[maxTextureUnits[0]];
         for (int i = 0; i < maxTextureUnits[0]; i++)

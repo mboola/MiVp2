@@ -16,6 +16,7 @@ public class RandomEntityFactory implements IEntityFactory
         // initialize collection of entities
         spawners = new ArrayList<EntityGenerator>();
         spawners.add(new BasicEntityGenerator());
+        spawners.add(new DoorGenerator());
     }
     public void generateEntities(List<IEntity> entities)
     {
@@ -24,8 +25,10 @@ public class RandomEntityFactory implements IEntityFactory
             updatesToNextEntity = maxUpdates;
             Random random = new Random();
             // Add to entities a new set of entities
-            System.out.println("Spawned entity");
-            entities.addAll(spawners.get(random.nextInt(spawners.size())).spawn());
+            List<IEntity> newEntities = spawners.get(random.nextInt(spawners.size())).spawn();
+            for (IEntity newEntity: newEntities) {
+                entities.add(newEntity);
+            }
         }
         else
             updatesToNextEntity--;

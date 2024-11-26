@@ -44,6 +44,8 @@ public class GraphicStorage
         initializeMesh(context, "dots", R.raw.dots);
         initializeMesh(context, "armwing", R.raw.armwing);
         initializeMesh(context, "static1", R.raw.static1);
+        initializeMesh(context, "door", R.raw.door);
+        initializeMesh(context, "door_structure", R.raw.door_structure);
     }
 
     /*

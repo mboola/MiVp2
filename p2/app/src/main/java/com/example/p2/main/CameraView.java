@@ -20,9 +20,9 @@ public class CameraView
     private final Vector3 baseEye;
     private final Vector3 baseCenter;
     private final Vector3 baseUp;
-    private Vector3 modificationEye;
-    private Vector3 modificationCenter;
-    private Vector3 modificationUp;
+    private final Vector3 modificationEye;
+    private final Vector3 modificationCenter;
+    private final Vector3 modificationUp;
     private boolean followsShip = true;
     private int lastKey;
     private int framesKeyPulsed;
@@ -93,10 +93,6 @@ public class CameraView
                     modificationUp.x = 0.15f;
                 break;
         }
-
-        // If a key is being pressed, go to that inclination
-        // (if left rotate L -15º, right rotate R15º)
-        // also translate the camera with the object (and rotate object, but it is something spaceship will do)
     }
 
     public void setCameraX(float x)

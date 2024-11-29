@@ -13,7 +13,6 @@ import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.TextureLinker;
 import com.example.p2.auxiliary.Vector3;
-import com.example.p2.entities.EntityController;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -28,6 +27,8 @@ public class SceneRenderer implements Renderer
 	private Queue<Integer> keysToHandle;
 	private boolean gamePaused = false;
 	private boolean graphicsInitialized = false;
+	private int height;
+	private int width;
 	public SceneRenderer(Context context)
 	{
 		keysToHandle = new LinkedList<>();
@@ -58,16 +59,11 @@ public class SceneRenderer implements Renderer
 	@Override //???????
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{
-		gl.glViewport(0, 0, width, height);
-		// Select the projection matrix
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		// Reset the projection matrix
-		gl.glLoadIdentity();
-		// Calculate the aspect ratio of the window
-		GLU.gluPerspective(gl, 60.0f, (float) width / (float) height, 0.1f, 1000.0f);
+		// Define the Viewport
+		this.width=width;
+		this.height=height;
 
-		// Select the modelview matrix
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glViewport(0, 0, width, height);
 	}
 
 	/*
@@ -132,10 +128,10 @@ public class SceneRenderer implements Renderer
 	// Elements must be rendered in order from farthest to nearest.
 	private void drawEntities(GL10 gl)
 	{
+		setPerspectiveProjection(gl);
+
 		// Clears the screen and depth buffer.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-
-		gl.glLoadIdentity();
 
 		camera.draw(gl);
 
@@ -146,6 +142,26 @@ public class SceneRenderer implements Renderer
 		gl.glPopMatrix();
 
 		//hud.draw(gl);
+	}
+
+	private void setPerspectiveProjection(GL10 gl)
+	{
+		gl.glClearDepthf(1.0f);            // Set depth's clear-value to farthest
+		gl.glEnable(GL10.GL_DEPTH_TEST);   // Enables depth-buffer for hidden surface removal
+		gl.glDepthFunc(GL10.GL_LEQUAL);    // The type of depth testing to do
+		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);  // nice perspective view
+		gl.glShadeModel(GL10.GL_SMOOTH);   // Enable smooth shading of color
+		gl.glDisable(GL10.GL_DITHER);      // Disable dithering for better performance
+		gl.glDepthMask(true);  // disable writes to Z-Buffer
+
+		gl.glMatrixMode(GL10.GL_PROJECTION); // Select projection matrix
+		gl.glLoadIdentity();                 // Reset projection matrix
+
+		// Use perspective projection
+		GLU.gluPerspective(gl, 60, (float) width / height, 0.1f, 100.f);
+
+		gl.glMatrixMode(GL10.GL_MODELVIEW);  // Select model-view matrix
+		gl.glLoadIdentity();                 // Reset
 	}
 
 	/*

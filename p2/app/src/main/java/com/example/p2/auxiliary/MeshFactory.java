@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
@@ -54,107 +55,97 @@ public class MeshFactory {
      */
     public static Mesh createMesh(Context context, int filenameId) throws IOException
     {
-        String line;
-        String[] tmp,ftmp;
+        InputStream inputStream = context.getResources().openRawResource(filenameId);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-        ArrayList<Float> vlist = new ArrayList<Float>();
-        ArrayList<Float> tlist = new ArrayList<Float>();
-        ArrayList<Float> nlist = new ArrayList<Float>();
-        ArrayList<Integer> vindex = new ArrayList<Integer>();
-        ArrayList<Integer> tindex = new ArrayList<Integer>();
-        ArrayList<Integer> nindex = new ArrayList<Integer>();
+        ArrayList<Float> vertices = new ArrayList<Float>();
+        ArrayList<Float> uvs = new ArrayList<Float>();
+        ArrayList<Float> normals = new ArrayList<Float>();
+
+        ArrayList<Integer> vertexIndices  = new ArrayList<Integer>();
+        ArrayList<Integer> uvIndices  = new ArrayList<Integer>();
+        ArrayList<Integer> normalIndices  = new ArrayList<Integer>();
 
         int numFaceIndexs = 0;
 
-        InputStream is = context.getResources().openRawResource(filenameId);
-        BufferedReader inb = new BufferedReader(new InputStreamReader(is), 1024);
-        while ((line = inb.readLine()) != null) {
-            tmp = line.split(" ");
-            if (tmp[0].equalsIgnoreCase("v"))
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(" ");
+            switch (parts[0])
             {
-                for (int i = 1; i < 4; i++) {
-                    vlist.add(Float.parseFloat(tmp[i]));
-                }
-            }
-            if (tmp[0].equalsIgnoreCase("vn"))
-            {
-                for (int i = 1; i < 4; i++) {
-                    nlist.add(Float.parseFloat(tmp[i]));
-                }
-            }
-            if (tmp[0].equalsIgnoreCase("vt"))
-            {
-                for (int i = 1; i < 3; i++) {
-                    tlist.add(Float.parseFloat(tmp[i]));
-                }
-            }
-            if (tmp[0].equalsIgnoreCase("f"))
-            {
-                for (int i = 1; i < 4; i++) {
-                    ftmp = tmp[i].split("/");
-
-                    vindex.add(Integer.parseInt(ftmp[0]) - 1);
-                    if (!tlist.isEmpty())
-                        tindex.add(Integer.parseInt(ftmp[1]) - 1);
-                    if (!nlist.isEmpty())
-                        nindex.add(Integer.parseInt(ftmp[2]) - 1);
-
-                    numFaceIndexs++;
-                }
+                case "v": // Vertex coordinates
+                    vertices.add(Float.parseFloat(parts[1]));
+                    vertices.add(Float.parseFloat(parts[2]));
+                    vertices.add(Float.parseFloat(parts[3]));
+                    break;
+                case "vt": // Texture coordinates
+                    uvs.add(Float.parseFloat(parts[1]));
+                    uvs.add(1f - Float.parseFloat(parts[2]));
+                    break;
+                case "vn": // Normals
+                    normals.add(Float.parseFloat(parts[1]));
+                    normals.add(Float.parseFloat(parts[2]));
+                    normals.add(Float.parseFloat(parts[3]));
+                    break;
+                case "f": // Faces
+                    for (int i = 1; i < 4; i++) {
+                        String[] indicesStr = parts[i].split("/");
+                        vertexIndices.add(Integer.parseInt(indicesStr[0]) - 1);
+                        uvIndices.add(Integer.parseInt(indicesStr[1]) - 1);
+                        normalIndices.add(Integer.parseInt(indicesStr[2]) - 1);
+                        numFaceIndexs++;
+                    }
+                    break;
             }
         }
+        reader.close();
 
-        ByteBuffer vbb = ByteBuffer.allocateDirect(vindex.size() * 4 * 3);
-        vbb.order(ByteOrder.nativeOrder());
-        FloatBuffer vertexBuffer = vbb.asFloatBuffer();
-
-        for (int j = 0; j < vindex.size(); j++) {
-            vertexBuffer.put(vlist.get( vindex.get(j)*3 ));
-            vertexBuffer.put(vlist.get( vindex.get(j)*3+1 ));
-            vertexBuffer.put(vlist.get( vindex.get(j)*3+2 ));
+        // Prepare buffers
+        FloatBuffer vertexBuffer = ByteBuffer.allocateDirect(vertexIndices.size() * 4 * 3)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+        for (int j = 0; j < vertexIndices.size(); j++) {
+            vertexBuffer.put(vertices.get( vertexIndices.get(j)*3 ));
+            vertexBuffer.put(vertices.get( vertexIndices.get(j)*3+1 ));
+            vertexBuffer.put(vertices.get( vertexIndices.get(j)*3+2 ));
         }
         vertexBuffer.position(0);
 
-        FloatBuffer textureCoordBuffer = null;
-
-        if (!tindex.isEmpty())  {
-            ByteBuffer vtbb = ByteBuffer.allocateDirect(tindex.size() * 4 * 2);
-            vtbb.order(ByteOrder.nativeOrder());
-            textureCoordBuffer = vtbb.asFloatBuffer();
-
-            for (int j = 0; j < tindex.size(); j++) {
-                textureCoordBuffer.put(tlist.get( tindex.get(j)*2 ));
-                textureCoordBuffer.put(tlist.get( tindex.get(j)*2+1 ));
+        FloatBuffer texcoordBuffer = null;
+        if (!uvs.isEmpty()) {
+            texcoordBuffer = ByteBuffer.allocateDirect(uvIndices.size() * 4 * 2)
+                    .order(ByteOrder.nativeOrder())
+                    .asFloatBuffer();
+            for (int j = 0; j < uvIndices.size(); j++) {
+                texcoordBuffer.put(uvs.get( uvIndices.get(j)*2 ));
+                texcoordBuffer.put(uvs.get( uvIndices.get(j)*2+1 ));
             }
-            textureCoordBuffer.position(0);
+            texcoordBuffer.position(0);
         }
 
         FloatBuffer normalBuffer = null;
-
-        if(!nindex.isEmpty()) {
-            ByteBuffer nbb = ByteBuffer.allocateDirect(nindex.size() * 4 * 3);
+        if(!normals.isEmpty()) {
+            ByteBuffer nbb = ByteBuffer.allocateDirect(normalIndices.size() * 4 * 3);
             nbb.order(ByteOrder.nativeOrder());
             normalBuffer = nbb.asFloatBuffer();
 
-            for (int j = 0; j < nindex.size(); j++) {
-                normalBuffer.put(nlist.get( nindex.get(j)*3 ));
-                normalBuffer.put(nlist.get( nindex.get(j)*3+1 ));
-                normalBuffer.put(nlist.get( nindex.get(j)*3+2 ));
+            for (int j = 0; j < normalIndices.size(); j++) {
+                normalBuffer.put(normals.get( normalIndices.get(j)*3 ));
+                normalBuffer.put(normals.get( normalIndices.get(j)*3+1 ));
+                normalBuffer.put(normals.get( normalIndices.get(j)*3+2 ));
             }
             normalBuffer.position(0);
         }
 
-        ShortBuffer indexBuffer;
-
-        ByteBuffer ibb = ByteBuffer.allocateDirect(numFaceIndexs * 2);
+        ByteBuffer ibb = ByteBuffer.allocateDirect(numFaceIndexs * 4);
         ibb.order(ByteOrder.nativeOrder());
-        indexBuffer = ibb.asShortBuffer();
+        IntBuffer indexBuffer = ibb.asIntBuffer();
 
-        for (short j = 0; j < numFaceIndexs; j++) {
+        for (int j = 0; j < numFaceIndexs; j++) {
             indexBuffer.put(j);
         }
         indexBuffer.position(0);
 
-        return new Mesh(vertexBuffer, normalBuffer, indexBuffer, textureCoordBuffer, numFaceIndexs);
+        return new Mesh(vertexBuffer, normalBuffer, indexBuffer, texcoordBuffer, numFaceIndexs);
     }
 }

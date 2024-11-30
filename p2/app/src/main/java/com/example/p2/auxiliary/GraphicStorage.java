@@ -35,7 +35,7 @@ public class GraphicStorage
     {
         initializeTexture(context, "background", R.raw.background);
         initializeTexture(context, "armwing_texture", R.raw.armwing_texture);
-        initializeTexture(context, "static1_texture", R.raw.base_texture);
+        initializeTexture(context, "static1_texture", R.raw.static1_texture);
         initializeTexture(context, "base_texture", R.raw.base_texture);
     }
 

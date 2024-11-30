@@ -1,16 +1,9 @@
 package com.example.p2.auxiliary;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.opengl.GLUtils;
+import android.opengl.GLES20;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -23,7 +16,7 @@ public class Mesh
     private final FloatBuffer normalBuffer;
 
     // Our index buffer.
-    private final ShortBuffer indexBuffer;
+    private final IntBuffer indexBuffer;
 
     // Our texture buffer.
     private final FloatBuffer textureCoordBuffer;
@@ -32,7 +25,7 @@ public class Mesh
     private String textureID;
 
     public Mesh(FloatBuffer vertexBuffer, FloatBuffer normalBuffer,
-                ShortBuffer indexBuffer, FloatBuffer textureCoordBuffer,
+                IntBuffer indexBuffer, FloatBuffer textureCoordBuffer,
                 int numFaceIndexs)
     {
         this.vertexBuffer = vertexBuffer;
@@ -44,7 +37,7 @@ public class Mesh
     }
 
     public Mesh(FloatBuffer vertexBuffer, FloatBuffer normalBuffer,
-                ShortBuffer indexBuffer, FloatBuffer textureCoordBuffer,
+               IntBuffer indexBuffer, FloatBuffer textureCoordBuffer,
                 int numFaceIndexs, String textureID)
     {
         this.vertexBuffer = vertexBuffer;
@@ -88,7 +81,7 @@ public class Mesh
             gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBuffer);
         }
         if (indexBuffer != null)
-            gl.glDrawElements(GL10.GL_TRIANGLES, numFaceIndexs, GL10.GL_UNSIGNED_SHORT, indexBuffer);
+            gl.glDrawElements(GL10.GL_TRIANGLES, numFaceIndexs, GLES20.GL_UNSIGNED_INT, indexBuffer);
         else
             gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 

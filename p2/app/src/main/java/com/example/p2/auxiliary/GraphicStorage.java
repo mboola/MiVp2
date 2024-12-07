@@ -4,16 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.example.p2.R;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +26,7 @@ public class GraphicStorage
 
     private static void setTextures(Context context)
     {
-        initializeTexture(context, "background", R.raw.background);
+        initializeTexture(context, "background", R.raw.kenshi_background2);
         initializeTexture(context, "armwing_texture", R.raw.armwing_texture);
         initializeTexture(context, "static1_texture", R.raw.static1_texture);
         initializeTexture(context, "base_texture", R.raw.base_texture);

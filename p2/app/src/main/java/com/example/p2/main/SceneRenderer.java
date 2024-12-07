@@ -38,7 +38,7 @@ public class SceneRenderer implements Renderer
 
 		camera = new CameraView();
 		// Create the objects used in the scene
-		background = new Background(new Vector3(0, 0.4f, Limits.getFarZ()), 35);
+		background = new Background(new Vector3(0, 0, Limits.getFarZ()), 30);
 		entityController = new EntityController();
 		spaceShip = new SpaceShip(new Vector3(0, 0, -1.8f), camera);
 		hud = new Hud(this);

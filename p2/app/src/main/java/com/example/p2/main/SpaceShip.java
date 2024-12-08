@@ -31,7 +31,7 @@ public class SpaceShip extends Entity
             camera.setCameraX(final_x + 1f);
         else
             camera.setCameraX(final_x /2);
-        if (final_y < Limits.getMaxY() && final_y > Limits.getMinY() - 0.45f)
+        if (final_y < Limits.getMaxY() && final_y > Limits.getMinY())
             position.y = final_y;
         if (position.y > 2f)
             camera.setCameraY(final_y - 1);

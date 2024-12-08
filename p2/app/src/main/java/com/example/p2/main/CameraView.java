@@ -34,9 +34,11 @@ public class CameraView
         outsideEye = new Vector3(-10, 10, -5);
         outsideCenter = new Vector3(0, 0, -5);
         outsideUp = new Vector3(0, 1, 0);
-        baseEye = new Vector3(0, 0, 0.5f);
-        baseCenter = new Vector3(0, 0, -5);
+
+        baseEye = new Vector3(0, 0.5f, 0.5f);
+        baseCenter = new Vector3(0, 0.5f, -5);
         baseUp = new Vector3(0, 1, 0);
+
         modificationEye = new Vector3(0,0,0);
         modificationCenter = new Vector3(0, 0, 0);
         modificationUp = new Vector3(0, 0, 0);

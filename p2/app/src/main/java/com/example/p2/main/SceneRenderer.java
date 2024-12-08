@@ -122,7 +122,6 @@ public class SceneRenderer implements Renderer
 		entityController.update();
 		spaceShip.update();
 		background.update();
-		hud.update();
 	}
 
 	// Elements must be rendered in order from farthest to nearest.
@@ -141,7 +140,7 @@ public class SceneRenderer implements Renderer
 		spaceShip.draw(gl);
 		gl.glPopMatrix();
 
-		//hud.draw(gl);
+		hud.draw(gl);
 	}
 
 	private void setPerspectiveProjection(GL10 gl)

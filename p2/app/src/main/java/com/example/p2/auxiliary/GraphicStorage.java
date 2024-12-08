@@ -19,20 +19,24 @@ public class GraphicStorage
         // Here initialize all the textures and meshes
         textures = new HashMap<String, Bitmap>();
         meshes = new HashMap<String, Mesh>();
-
-        setTextures(context);
-        setMeshes(context);
+        initializeTextures(context);
+        initializeMeshes(context);
     }
 
-    private static void setTextures(Context context)
+    private static void initializeTextures(Context context)
     {
         initializeTexture(context, "background", R.raw.kenshi_background2);
         initializeTexture(context, "armwing_texture", R.raw.armwing_texture);
         initializeTexture(context, "static1_texture", R.raw.static1_texture);
         initializeTexture(context, "base_texture", R.raw.base_texture);
+        // Hud textures
+        initializeTexture(context, "shield_text", R.raw.shield_text);
+        initializeTexture(context, "container", R.raw.container);
+        initializeTexture(context, "shield_bar", R.raw.shield_bar);
+        initializeTexture(context, "energy_bar", R.raw.energy_bar);
     }
 
-    private static void setMeshes(Context context)
+    private static void initializeMeshes(Context context)
     {
         initializeMesh(context, "dots", R.raw.dots);
         initializeMesh(context, "armwing", R.raw.armwing);
@@ -63,7 +67,6 @@ public class GraphicStorage
             }
         }
     }
-
 
     private static void initializeMesh(Context context, String meshID, int filenameId)
     {

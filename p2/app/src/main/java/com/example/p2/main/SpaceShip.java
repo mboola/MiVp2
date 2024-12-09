@@ -66,7 +66,7 @@ public class SpaceShip extends Entity
     public IEntity shoot()
     {
         // Create a new IEntity proyectile with the direction of the spaceship
-        return new ProjectileEntity(new Vector3(0,0,-10)); // TODO : change this
+        return new ProjectileEntity(new Vector3(0,0,Limits.getFarZ())); // TODO : change this
     }
 
     @Override

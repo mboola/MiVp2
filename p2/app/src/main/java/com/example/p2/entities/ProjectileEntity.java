@@ -15,7 +15,7 @@ public class ProjectileEntity extends Entity
     };
 
     private int frames;
-    private final int maxFrames = 30;
+    private final int maxFrames = 15;
 
 
     public ProjectileEntity(Vector3 position)

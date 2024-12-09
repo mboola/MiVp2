@@ -2,6 +2,8 @@ package com.example.p2.auxiliary;
 
 import android.opengl.GLES20;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.nio.FloatBuffer;
 
@@ -19,7 +21,7 @@ public class Mesh
     private final IntBuffer indexBuffer;
 
     // Our texture buffer.
-    private final FloatBuffer textureCoordBuffer;
+    private FloatBuffer textureCoordBuffer;
     private final int numFaceIndexs;
     private boolean textureEnabled;
     private String textureID;
@@ -97,6 +99,15 @@ public class Mesh
             gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
 
         gl.glDisable(GL10.GL_CULL_FACE);
+    }
+
+    public void setUVs(float[] uvs)
+    {
+        ByteBuffer tbb = ByteBuffer.allocateDirect(uvs.length * 4);
+        tbb.order(ByteOrder.nativeOrder());
+        textureCoordBuffer = tbb.asFloatBuffer();
+        textureCoordBuffer.put(uvs);
+        textureCoordBuffer.position(0);
     }
 
     public Mesh copy(String newTexture)

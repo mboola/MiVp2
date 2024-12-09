@@ -44,4 +44,9 @@ public class EntityController {
             entity.draw(gl);
         }
     }
+
+    public void addEntity(IEntity entity)
+    {
+        entities.add(entity);
+    }
 }

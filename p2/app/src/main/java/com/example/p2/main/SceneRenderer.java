@@ -110,6 +110,9 @@ public class SceneRenderer implements Renderer
 						camera.setLastKey(KeyEvent.KEYCODE_D);
 						spaceShip.move(0.2f, 0, 0);
 						break;
+					case KeyEvent.KEYCODE_ENTER:
+						entityController.addEntity(spaceShip.shoot());
+						break;
 				}
 			}
 		}

@@ -4,6 +4,8 @@ import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.Vector3;
 import com.example.p2.entities.Entity;
+import com.example.p2.entities.IEntity;
+import com.example.p2.entities.ProjectileEntity;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -59,6 +61,12 @@ public class SpaceShip extends Entity
         animation.draw(gl);
         mesh.draw(gl);
         gl.glPopMatrix();
+    }
+
+    public IEntity shoot()
+    {
+        // Create a new IEntity proyectile with the direction of the spaceship
+        return new ProjectileEntity(new Vector3(0,0,-10)); // TODO : change this
     }
 
     @Override

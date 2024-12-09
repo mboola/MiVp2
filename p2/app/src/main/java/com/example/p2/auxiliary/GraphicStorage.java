@@ -34,6 +34,8 @@ public class GraphicStorage
         initializeTexture(context, "container", R.raw.container);
         initializeTexture(context, "shield_bar", R.raw.shield_bar);
         initializeTexture(context, "energy_bar", R.raw.energy_bar);
+        // Proyectile textures
+        initializeTexture(context, "proyectile", R.raw.proyectile);
     }
 
     private static void initializeMeshes(Context context)

@@ -1,6 +1,7 @@
 package com.example.p2.auxiliary;
 
 import static android.opengl.GLES10.GL_BLEND;
+import static android.opengl.GLES10.GL_COLOR_MATERIAL;
 import static android.opengl.GLES10.GL_ONE_MINUS_SRC_ALPHA;
 import static android.opengl.GLES10.GL_SRC_ALPHA;
 
@@ -64,8 +65,6 @@ public class Mesh
         {
             gl.glBindTexture(GL10.GL_TEXTURE_2D, TextureLinker.getTextureID(gl, textureID));
             gl.glEnable(GL10.GL_TEXTURE_2D);  // Enable texture
-            gl.glEnable(GL_BLEND);
-            gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
 
         gl.glFrontFace(GL10.GL_CCW);    // Front face in counter-clockwise orientation
@@ -79,6 +78,7 @@ public class Mesh
 
         if(textureEnabled)
         {
+            gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
             gl.glTexCoordPointer(2, GL10.GL_FLOAT,0, textureCoordBuffer);
         }
@@ -98,7 +98,6 @@ public class Mesh
         {
             gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
             gl.glDisable(GL10.GL_TEXTURE_2D);
-            gl.glDisable(GL_BLEND);
         }
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 

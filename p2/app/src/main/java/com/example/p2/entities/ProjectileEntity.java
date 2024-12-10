@@ -1,5 +1,6 @@
 package com.example.p2.entities;
 
+import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.MeshFactory;
 import com.example.p2.auxiliary.Vector3;
 
@@ -16,11 +17,13 @@ public class ProjectileEntity extends Entity
 
     private int frames;
     private final int maxFrames = 15;
+    private float velMult = 0.05f;
+    private Vector3 direction;
 
-
-    public ProjectileEntity(Vector3 position)
+    public ProjectileEntity(Vector3 position, Vector3 direction)
     {
         this.position = position;
+        this.direction = direction;
         mesh = MeshFactory.createMesh("proyectile");
         mesh.setUVs(uvs);
         frames = 0;
@@ -41,13 +44,10 @@ public class ProjectileEntity extends Entity
             frames = 0;
         }
         frames++;
-        return super.update();
-    }
-
-    @Override
-    public void draw(GL10 gl)
-    {
-        mesh.draw(gl);
+        position.x -= (direction.x * velMult * 0.1f);
+        position.y -= (direction.y * -velMult * 0.1f);
+        position.z -= (direction.z * velMult);
+        return Limits.outOfLimits(position);
     }
 
     @Override

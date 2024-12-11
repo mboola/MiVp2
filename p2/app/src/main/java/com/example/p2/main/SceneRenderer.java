@@ -32,7 +32,23 @@ public class SceneRenderer implements Renderer
 	private boolean graphicsInitialized = false;
 	private int height;
 	private int width;
-	public SceneRenderer(Context context)
+
+	private static SceneRenderer instance;
+
+	public static SceneRenderer getInstance() {
+		return instance;
+	}
+
+	public static SceneRenderer initialize(Context context) {
+		instance = new SceneRenderer(context);
+		return instance;
+	}
+
+	public EntityController getEntityController() {
+		return entityController;
+	}
+
+	private SceneRenderer(Context context)
 	{
 		keysToHandle = new LinkedList<>();
 

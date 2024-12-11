@@ -119,7 +119,7 @@ public class SpaceShip extends Entity
     }
 
     @Override
-    protected boolean hasCollided(Vector3 position) {
+    public boolean hasCollided(Vector3 position) {
         return false;
     }
 }

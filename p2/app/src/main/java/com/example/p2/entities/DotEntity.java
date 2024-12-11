@@ -20,9 +20,4 @@ public class DotEntity extends Entity
             position.z = Limits.getFarZ() + position.z;
         return false;
     }
-
-    @Override
-    protected boolean hasCollided(Vector3 position) {
-        return false;
-    }
 }

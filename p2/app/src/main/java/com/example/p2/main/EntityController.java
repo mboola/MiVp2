@@ -1,5 +1,6 @@
 package com.example.p2.main;
 
+import com.example.p2.auxiliary.Vector3;
 import com.example.p2.entities.IEntity;
 import com.example.p2.entities.IEntityFactory;
 import com.example.p2.entities.RandomEntityFactory;
@@ -36,6 +37,13 @@ public class EntityController {
                 iterator.remove();
             }
         }
+        iterator = entities.iterator();
+        while (iterator.hasNext()) {
+            IEntity entity = iterator.next();
+            if (entity.isHit()) {
+                iterator.remove();
+            }
+        }
     }
     public void draw(GL10 gl)
     {
@@ -43,6 +51,19 @@ public class EntityController {
         {
             entity.draw(gl);
         }
+    }
+
+    public boolean checkCollisions(Vector3 position)
+    {
+        Iterator<IEntity> iterator = entities.iterator();
+        while (iterator.hasNext()) {
+            IEntity entityToCollide = iterator.next();
+            if (entityToCollide.hasCollided(position)) {
+                entityToCollide.hit();
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addEntity(IEntity entity)

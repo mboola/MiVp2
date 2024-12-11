@@ -30,9 +30,4 @@ public class DynamicEntity extends Entity
         }
         return super.update();
     }
-
-    @Override
-    protected boolean hasCollided(Vector3 position) {
-        return false;
-    }
 }

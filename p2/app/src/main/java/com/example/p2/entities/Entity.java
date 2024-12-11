@@ -13,7 +13,18 @@ public abstract class Entity implements IEntity
 {
     protected Vector3 position;
     protected Mesh mesh;
-    abstract protected boolean hasCollided(Vector3 position);
+    protected boolean alive = true;
+    public boolean hasCollided(Vector3 position) {
+        return false;
+    }
+    public void hit()
+    {
+        alive = false;
+    }
+    public boolean isHit()
+    {
+        return !alive;
+    }
 
     public boolean update()
     {

@@ -3,6 +3,7 @@ package com.example.p2.entities;
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.MeshFactory;
 import com.example.p2.auxiliary.Vector3;
+import com.example.p2.main.SceneRenderer;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -47,11 +48,12 @@ public class ProjectileEntity extends Entity
         position.x -= (direction.x * velMult * 0.1f);
         position.y -= (direction.y * -velMult * 0.1f);
         position.z -= (direction.z * velMult);
-        return Limits.outOfLimits(position);
+        boolean outOfLimits = Limits.outOfLimits(position);
+        if (!outOfLimits)
+        {
+            return SceneRenderer.getInstance().getEntityController().checkCollisions(position);
+        }
+        return outOfLimits;
     }
 
-    @Override
-    protected boolean hasCollided(Vector3 position) {
-        return false;
-    }
 }

@@ -14,7 +14,7 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GLSurfaceView view = new GLSurfaceView(this);
-        renderer = new SceneRenderer(this);
+        renderer = SceneRenderer.initialize(this);
         view.setRenderer(renderer);
         setContentView(view);
     }

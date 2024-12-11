@@ -14,99 +14,91 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class CameraView
 {
-    private final Vector3 outsideEye;
-    private final Vector3 outsideCenter;
-    private final Vector3 outsideUp;
-    private final Vector3 baseEye;
-    private final Vector3 baseCenter;
-    private final Vector3 baseUp;
-    private final Vector3 modificationEye;
-    private final Vector3 modificationCenter;
-    private final Vector3 modificationUp;
-    private boolean followsShip = true;
-    private int lastKey;
-    private int framesKeyPulsed;
+    private final Vector3 baseEye = new Vector3(0, 0.5f, 0.5f);
+    private final Vector3 baseCenter = new Vector3(0, 0.5f, -5);
+    private final Vector3 baseUp = new Vector3(0, 1, 0);
+    private final Vector3 modificationEye = new Vector3(0,0,0);
+    private final Vector3 modificationCenter = new Vector3(0, 0, 0);
+    private final Vector3 modificationUp = new Vector3(0, 0, 0);
+    private boolean followsShip;
+    private final float delayTilReturn = 1f;
+    private float timeSinceLastInput;
+    private final float delayDecrementer = 0.01f;
+    private final float rotationDecrementer = 0.005f;
 
     public CameraView()
     {
-        lastKey = -1;
-        framesKeyPulsed = -1;
-        outsideEye = new Vector3(-10, 10, -5);
-        outsideCenter = new Vector3(0, 0, -5);
-        outsideUp = new Vector3(0, 1, 0);
-
-        baseEye = new Vector3(0, 0.5f, 0.5f);
-        baseCenter = new Vector3(0, 0.5f, -5);
-        baseUp = new Vector3(0, 1, 0);
-
-        modificationEye = new Vector3(0,0,0);
-        modificationCenter = new Vector3(0, 0, 0);
-        modificationUp = new Vector3(0, 0, 0);
+        followsShip = true;
+        timeSinceLastInput = 0;
     }
 
-    public void setLastKey(int lastKey)
+    public void updatePosition(float x, float y)
     {
-        this.lastKey = lastKey;
-        framesKeyPulsed = 0;
-    }
-
-    public void update()
-    {
-        if (framesKeyPulsed == -1)
-        {
-            // If a movement key is not being pressed and camera has an inclination
-            // return slowly to neutral camera (lineally)
-            if (modificationUp.x > 0)
-            {
-                modificationUp.x -= 0.005f;
-                if (modificationUp.x < 0)
-                    modificationUp.x = 0;
-            }
-            else if (modificationUp.x < 0)
-            {
-                modificationUp.x += 0.005f;
-                if (modificationUp.x > 0)
-                    modificationUp.x = 0;
-            }
-            return ;
-        }
+        timeSinceLastInput = delayTilReturn;
+        if (x > 2)
+            setCameraX(x - 1);
+        else if (x < -2)
+            setCameraX(x + 1);
         else
-        {
-            framesKeyPulsed++;
-            if (framesKeyPulsed >= 30)
-                framesKeyPulsed = -1;
-        }
-
-        switch (lastKey) {
-            case KeyEvent.KEYCODE_W:
-                break;
-            case KeyEvent.KEYCODE_S:
-                break;
-            case KeyEvent.KEYCODE_A: // Left
-                if (modificationUp.x > -0.15f)
-                    modificationUp.x -= 0.01f;
-                else
-                    modificationUp.x = -0.15f;
-                break;
-            case KeyEvent.KEYCODE_D:
-                if (modificationUp.x < 0.15f)
-                    modificationUp.x += 0.01f;
-                else
-                    modificationUp.x = 0.15f;
-                break;
-        }
+            setCameraX(x / 2);
+        if (y > 2f)
+            setCameraY(y - 1);
+        else if (y > 0.5f)
+            setCameraY(y / 2);
+        else
+            setCameraY(0);
     }
 
-    public void setCameraX(float x)
+    private void setCameraX(float x)
     {
         modificationEye.x = x;
         modificationCenter.x = x;
     }
 
-    public void setCameraY(float y)
+    private void setCameraY(float y)
     {
         modificationEye.y = y;
         modificationCenter.y = y;
+    }
+
+    public void updateRotation(float rotationX, float rotationY)
+    {
+        if (rotationX > 0)
+        {
+            if (modificationUp.x > -0.15f)
+                modificationUp.x -= 0.01f;
+            else
+                modificationUp.x = -0.15f;
+        }
+        else if (rotationX < 0)
+        {
+            if (modificationUp.x < 0.15f)
+                modificationUp.x += 0.01f;
+            else
+                modificationUp.x = 0.15f;
+        }
+    }
+
+    public void update()
+    {
+        if (timeSinceLastInput > 0)
+        {
+            timeSinceLastInput -= delayDecrementer;
+            return ;
+        }
+
+        if (modificationUp.x > 0)
+        {
+            modificationUp.x -= rotationDecrementer;
+            if (modificationUp.x < 0)
+                modificationUp.x = 0;
+        }
+        else if (modificationUp.x < 0)
+        {
+            modificationUp.x += rotationDecrementer;
+            if (modificationUp.x > 0)
+                modificationUp.x = 0;
+        }
     }
 
     public void draw(GL10 gl)
@@ -116,7 +108,12 @@ public class CameraView
                     baseCenter.x + modificationCenter.x, baseCenter.y + modificationCenter.y, baseCenter.z + modificationCenter.z,
                     baseUp.x + modificationUp.x, baseUp.y + modificationUp.y, baseUp.z + modificationUp.z);
         else
-            GLU.gluLookAt(gl, outsideEye.x, outsideEye.y, outsideEye.z, outsideCenter.x, outsideCenter.y, outsideCenter.z, outsideUp.x, outsideUp.y, outsideUp.z);
+        {
+            GLU.gluLookAt(gl,
+                    -10, 10, -5,
+                    0, 0, -5,
+                    0, 1, 0);
+        }
     }
 
     public void changeView()

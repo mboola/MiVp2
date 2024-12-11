@@ -7,7 +7,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Hud
 {
-    private SceneRenderer renderer;
     private TextureImage lifesCounter;
     private TextureImage shipImage;
     private TextureImage shildText;
@@ -16,9 +15,8 @@ public class Hud
     private TextureImage energyContainer;
     private TextureImage energyBar;
     private TextureImage[] bombs;
-    public Hud(SceneRenderer renderer)
+    public Hud()
     {
-        this.renderer = renderer;
         //lifesCounter = new TextureImage("");
         //shipImage = new TextureImage("");
         shildText = new TextureImage("shield_text", new Vector3(-4,-2.25f,0), new Vector3(0.8f,0.35f,1));

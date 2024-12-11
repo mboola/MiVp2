@@ -17,15 +17,14 @@ public abstract class Entity implements IEntity
     public boolean hasCollided(Vector3 position) {
         return false;
     }
-    public void hit()
+    public void hasBeenHit()
     {
         alive = false;
     }
-    public boolean isHit()
+    public boolean isDead()
     {
         return !alive;
     }
-
     public boolean update()
     {
         position.z += 0.1f;

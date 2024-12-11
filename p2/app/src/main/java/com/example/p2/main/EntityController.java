@@ -40,7 +40,7 @@ public class EntityController {
         iterator = entities.iterator();
         while (iterator.hasNext()) {
             IEntity entity = iterator.next();
-            if (entity.isHit()) {
+            if (entity.isDead()) {
                 iterator.remove();
             }
         }
@@ -59,7 +59,7 @@ public class EntityController {
         while (iterator.hasNext()) {
             IEntity entityToCollide = iterator.next();
             if (entityToCollide.hasCollided(position)) {
-                entityToCollide.hit();
+                entityToCollide.hasBeenHit();
                 return true;
             }
         }

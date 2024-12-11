@@ -45,15 +45,26 @@ public class ProjectileEntity extends Entity
             frames = 0;
         }
         frames++;
-        position.x -= (direction.x * velMult * 0.1f);
-        position.y -= (direction.y * -velMult * 0.1f);
+        position.x -= (direction.x * velMult);
+        position.y -= (direction.y * -velMult);
         position.z -= (direction.z * velMult);
         boolean outOfLimits = Limits.outOfLimits(position);
         if (!outOfLimits)
         {
-            return SceneRenderer.getInstance().getEntityController().checkCollisions(position);
+            return SceneRenderer.getRenderer().getEntityController().checkCollisions(position);
         }
         return outOfLimits;
+    }
+
+    @Override
+    public void draw(GL10 gl)
+    {
+        gl.glDisable(GL10.GL_LIGHTING);
+        gl.glPushMatrix();
+        gl.glTranslatef(position.x, position.y, position.z);
+        mesh.draw(gl);
+        gl.glPopMatrix();
+        gl.glEnable(GL10.GL_LIGHTING);
     }
 
 }

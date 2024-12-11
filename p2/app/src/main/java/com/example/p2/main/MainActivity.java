@@ -5,6 +5,8 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
+import com.example.p2.auxiliary.GraphicStorage;
+
 public class MainActivity extends Activity {
 
     private SceneRenderer renderer;
@@ -13,19 +15,20 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize all graphics (meshes and textures)
+        GraphicStorage.Initialize(this);
+
         GLSurfaceView view = new GLSurfaceView(this);
-        renderer = SceneRenderer.initialize(this);
+        renderer = SceneRenderer.getRenderer();
         view.setRenderer(renderer);
         setContentView(view);
     }
 
-    /*
-     *  When a key is pressed it gets stored in a queue inside
-     *  renderer to be handled in the next update.
-     */
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        renderer.addKey(keyCode);
-        return super.onKeyUp(keyCode, event);  // true??
+    public boolean onKeyUp(int keyCode, KeyEvent event)
+    {
+        renderer.keyPushed(keyCode);
+        return true;
     }
 }

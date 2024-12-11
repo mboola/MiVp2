@@ -11,47 +11,52 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class SpaceShip extends Entity
 {
-    private SpaceShipAnimation animation;
     private CameraView camera;
-    private Vector3 lookingAt;
-    private float rotationMultiplier = 20f;
-    private float rotationDecreaser = 0.5f;
-    private float maxRotation = 20f;
+    private SpaceShipAnimation animation;
+    private Vector3 rotation;
+
+    // Seconds passed without input that makes the ship return to original position
+    private final float delayTilReturn = 1f;
+    private float timeSinceLastInput;
+    private final float delayDecrementer = 0.01f;
+    private final float rotationDecrementer = 0.5f;
+    private final float maxRotation = 20f;
+    private final float rotationMultiplier = 20f;
+
     public SpaceShip(Vector3 position, CameraView camera)
     {
-        this.camera = camera;
         this.position = position;
-        lookingAt = new Vector3(0,0, -5);
+        this.camera = camera;
+        rotation = new Vector3(0,0,0);
         animation = new SpaceShipAnimation();
+        timeSinceLastInput = 0;
         mesh = GraphicStorage.getMesh("armwing", "armwing_texture");
     }
 
     // TODO : change how rotation of ship gets calculated
 
-    public void move(float x, float y, float z)
+    public void translate(float x, float y, float z)
     {
+        timeSinceLastInput = delayTilReturn;
+
+        // Update position if inside limits
         float final_x = position.x + x;
-        if (lookingAt.x + (x * rotationMultiplier) <= maxRotation && lookingAt.x + (x * rotationMultiplier) >= -maxRotation)
-            lookingAt.x += (x * -rotationMultiplier);
-        if (lookingAt.y + (y * rotationMultiplier) <= maxRotation && lookingAt.y + (y * rotationMultiplier) >= -maxRotation)
-            lookingAt.y += (y * rotationMultiplier);
-        float final_y = position.y + y;
         if (final_x < Limits.getMaxX() && final_x > Limits.getMinX())
             position.x = final_x;
-        if (position.x > 2)
-            camera.setCameraX(final_x - 1f);
-        else if (position.x < -2)
-            camera.setCameraX(final_x + 1f);
-        else
-            camera.setCameraX(final_x /2);
+        float final_y = position.y + y;
         if (final_y < Limits.getMaxY() && final_y > Limits.getMinY())
             position.y = final_y;
-        if (position.y > 2f)
-            camera.setCameraY(final_y - 1);
-        else if (position.y > 0.5f)
-            camera.setCameraY(final_y / 2);
-        else
-            camera.setCameraY(0);
+
+        // Update rotation of spaceship
+        float final_rotation_x = rotation.x + x * -rotationMultiplier;
+        if (final_rotation_x < maxRotation && final_rotation_x > -maxRotation)
+            rotation.x = final_rotation_x;
+        float final_rotation_y = rotation.y + y * rotationMultiplier;
+        if (final_rotation_y < maxRotation && final_rotation_y > -maxRotation)
+            rotation.y = final_rotation_y;
+
+        // Update ONLY position of camera
+        camera.updatePosition(position.x, position.y);
     }
 
     public Vector3 getPosition()
@@ -61,61 +66,72 @@ public class SpaceShip extends Entity
 
     public boolean update()
     {
-        if (lookingAt.x > 0)
+        animation.update();
+
+        if (timeSinceLastInput > 0)
         {
-            lookingAt.x -= rotationDecreaser;
-            if (lookingAt.x < 0)
-                lookingAt.x = 0;
+            timeSinceLastInput -= delayDecrementer;
+            return false;
         }
-        else if (lookingAt.x < 0)
+
+        if (rotation.x > 0)
         {
-            lookingAt.x += rotationDecreaser;
-            if (lookingAt.x > 0)
-                lookingAt.x = 0;
+            rotation.x -= rotationDecrementer;
+            if (rotation.x < 0)
+                rotation.x = 0;
         }
-        if (lookingAt.y > 0)
+        else if (rotation.x < 0)
         {
-            lookingAt.y -= rotationDecreaser;
-            if (lookingAt.y < 0)
-                lookingAt.y = 0;
+            rotation.x += rotationDecrementer;
+            if (rotation.x > 0)
+                rotation.x = 0;
         }
-        else if (lookingAt.y < 0)
+        if (rotation.y > 0)
         {
-            lookingAt.y += rotationDecreaser;
-            if (lookingAt.y > 0)
-                lookingAt.y = 0;
+            rotation.y -= rotationDecrementer;
+            if (rotation.y < 0)
+                rotation.y = 0;
+        }
+        else if (rotation.y < 0)
+        {
+            rotation.y += rotationDecrementer;
+            if (rotation.y > 0)
+                rotation.y = 0;
         }
         animation.update();
         return false;
     }
 
+    @Override
     public void draw(GL10 gl)
     {
         gl.glPushMatrix();
         gl.glTranslatef(position.x, position.y, position.z);
-        if (lookingAt.x != 0)
-            gl.glRotatef(lookingAt.x, 0, 1, 0);
-        if (lookingAt.y != 0)
-            gl.glRotatef(lookingAt.y, 1, 0, 0);
+        if (rotation.x != 0)
+            gl.glRotatef(rotation.x, 0, 1, 0);
+        if (rotation.y != 0)
+            gl.glRotatef(rotation.y, 1, 0, 0);
         animation.draw(gl);
         mesh.draw(gl);
         gl.glPopMatrix();
     }
 
-    public IEntity shoot()
+    public void shoot()
     {
-        // Create a new IEntity proyectile with the direction of the spaceship
-        // TODO : hell naw change this
-        if (lookingAt.x != 0)
-        {
-            if (lookingAt.y != 0)
-                return new ProjectileEntity(new Vector3(position.x, position.y, position.z), new Vector3(lookingAt.x - position.x,lookingAt.y - position.y, 1));
-            else
-                return new ProjectileEntity(new Vector3(position.x, position.y, position.z), new Vector3(lookingAt.x - position.x,0, 1));
-        }
-        else if (lookingAt.y != 0)
-            return new ProjectileEntity(new Vector3(position.x, position.y, position.z), new Vector3(0,lookingAt.y - position.y, 1));
-        return new ProjectileEntity(new Vector3(position.x, position.y, position.z), new Vector3(0,0, 1));
+        // Create a new IEntity projectile with the direction of the spaceship
+        float direction_x = 0;
+        if (rotation.x != 0)
+            direction_x = (float)Math.tan(Math.toRadians(rotation.x));
+        float direction_y = 0;
+        if (rotation.y != 0)
+            direction_y = (float)Math.tan(Math.toRadians(rotation.y));
+        float direction_z = 1;
+        if (rotation.z != 0)
+            direction_z = (float)Math.tan(Math.toRadians(rotation.z));
+
+        System.out.println(position.x + "," + position.y + "," + position.z);
+        IEntity projectile = new ProjectileEntity(new Vector3(position.x, position.y, position.z), new Vector3(direction_x, direction_y, direction_z));
+        SceneRenderer.getRenderer().getEntityController().addEntity(projectile);
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.view.KeyEvent;
+import android.widget.Space;
 
 import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Light;
@@ -21,26 +22,41 @@ import java.util.Queue;
 
 public class SceneRenderer implements Renderer
 {
-	private EntityController entityController;
-	private Background background;
-	private SpaceShip spaceShip;
 	private CameraView camera;
+	private Background background;
+	private EntityController entityController;
+	private SpaceShip spaceShip;
 	private Hud hud;
-	private Light light;
-	private Queue<Integer> keysToHandle;
+	private MovementController movementController;
 	private boolean gamePaused = false;
+
+	private Light light;
 	private boolean graphicsInitialized = false;
+
 	private int height;
 	private int width;
 
-	private static SceneRenderer instance;
+	// SingletonPattern
+	private static SceneRenderer instance = null;
 
-	public static SceneRenderer getInstance() {
-		return instance;
+	private SceneRenderer()
+	{
+		camera = new CameraView();
+
+		// Create the objects used in the scene
+		background = new Background(new Vector3(0, 0, Limits.getFarZ()), 30);
+		entityController = new EntityController();
+		spaceShip = new SpaceShip(new Vector3(0, 0, -1.8f), camera);
+
+		// Controller that defines the movement of the ship and the camera
+		movementController = new MovementController(spaceShip, camera);
+
+		hud = new Hud();
 	}
 
-	public static SceneRenderer initialize(Context context) {
-		instance = new SceneRenderer(context);
+	public static SceneRenderer getRenderer() {
+		if (instance == null)
+			instance = new SceneRenderer();
 		return instance;
 	}
 
@@ -48,19 +64,20 @@ public class SceneRenderer implements Renderer
 		return entityController;
 	}
 
-	private SceneRenderer(Context context)
-	{
-		keysToHandle = new LinkedList<>();
+	public CameraView getCamera() {
+		return camera;
+	}
 
-		// Initialize all graphics (meshes and textures)
-		GraphicStorage.Initialize(context);
-
-		camera = new CameraView();
-		// Create the objects used in the scene
-		background = new Background(new Vector3(0, 0, Limits.getFarZ()), 30);
-		entityController = new EntityController();
-		spaceShip = new SpaceShip(new Vector3(0, 0, -1.8f), camera);
-		hud = new Hud(this);
+	public void keyPushed(int keyCode) {
+		if (keyCode == KeyEvent.KEYCODE_SPACE) {
+			gamePaused = !gamePaused;
+		}
+		else if (keyCode == KeyEvent.KEYCODE_C) {
+			getCamera().changeView();
+		}
+		else if (!gamePaused) {
+			movementController.keyPushed(keyCode);
+		}
 	}
 
 	/*
@@ -82,7 +99,7 @@ public class SceneRenderer implements Renderer
 		gl.glDisable(GL10.GL_DITHER);      // Disable dithering for better performance
 
 		//Set default ambience light
-		gl.glLightModelfv(GL10.GL_LIGHT_MODEL_AMBIENT, new float[]{0, 0, 0, 0}, 0);
+		gl.glLightModelfv(GL10.GL_LIGHT_MODEL_AMBIENT, new float[]{1, 1, 1, 0}, 0);
 
 		//Enable Lights
 		gl.glEnable(GL10.GL_LIGHTING);
@@ -102,7 +119,7 @@ public class SceneRenderer implements Renderer
 		// Lights initializations
 		light = new Light(gl, GL10.GL_LIGHT0);
 		light.setPosition(new float[]{0.0f, 0, 0, 0.0f});
-		light.setAmbientColor(new float[]{1f, 1f, 1f});
+		//light.setAmbientColor(new float[]{1f, 1f, 1f});
 		light.setDiffuseColor(new float[]{0.5f, 0.5f, 0.5f});
 
 		// Game initializations
@@ -126,62 +143,35 @@ public class SceneRenderer implements Renderer
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
+		// TODO : calculate deltaTime
+
 		if (!graphicsInitialized)
 			return ;
-		handleInput();
 		if (!gamePaused)
 			updateEntities();
 		drawEntities(gl);
 	}
 
-	private void handleInput()
-	{
-		int	key;
-
-		while (!keysToHandle.isEmpty())
-		{
-			key = keysToHandle.remove();
-			if (key == KeyEvent.KEYCODE_SPACE){
-				gamePaused = !gamePaused;
-			}
-			else if (key == KeyEvent.KEYCODE_C) {
-				camera.changeView();
-			} else if (!gamePaused) {
-				switch (key) {
-					case KeyEvent.KEYCODE_W:
-						camera.setLastKey(KeyEvent.KEYCODE_W);
-						spaceShip.move(0, 0.2f, 0);
-						break;
-					case KeyEvent.KEYCODE_S:
-						camera.setLastKey(KeyEvent.KEYCODE_S);
-						spaceShip.move(0, -0.2f, 0);
-						break;
-					case KeyEvent.KEYCODE_A:
-						camera.setLastKey(KeyEvent.KEYCODE_A);
-						spaceShip.move(-0.2f, 0, 0);
-						break;
-					case KeyEvent.KEYCODE_D:
-						camera.setLastKey(KeyEvent.KEYCODE_D);
-						spaceShip.move(0.2f, 0, 0);
-						break;
-					case KeyEvent.KEYCODE_ENTER:
-						entityController.addEntity(spaceShip.shoot());
-						break;
-				}
-			}
-		}
-	}
-
+	/*
+	 *	Update the logic of the game.
+	 */
 	private void updateEntities()
 	{
 		camera.update();
 
+		// Update all entities: collided into something or else
 		entityController.update();
+
+		// Check collisions
 		spaceShip.update();
+
+		// Move cubes
 		background.update();
 	}
 
-	// Elements must be rendered in order from farthest to nearest.
+	/*
+	 *	Draw the objects of the scene.
+	 */
 	private void drawEntities(GL10 gl)
 	{
 		setPerspectiveProjection(gl);
@@ -218,14 +208,6 @@ public class SceneRenderer implements Renderer
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW);  // Select model-view matrix
 		gl.glLoadIdentity();                 // Reset
-	}
-
-	/*
-	 *	Adds a new key to handle in the next update.
-	 */
-	public void addKey(int keyCode)
-	{
-		keysToHandle.add(keyCode);
 	}
 
 }

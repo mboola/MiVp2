@@ -127,21 +127,23 @@ public class SceneRenderer implements Renderer
 		spaceShip.update();
 
 		Vector3 position = spaceShip.getPosition();
-		light.setPosition(new float[]{position.x, position.y, position.z, 0.0f});
+		light.setPosition(new float[]{position.x, position.y, position.z - 1, 0.0f});
+		light.setSpecularColor(new float[]{1f, 1f, 1f});
+		light.setDiffuseColor(new float[]{1f, 1f, 1f});
 
 		// Move cubes
 		background.update();
 
 		if (isDay)
 		{
-			dayTime += 0.0001f;
+			dayTime += 0.001f;
 			if (dayTime >= 1)
 				isDay = !isDay;
 		}
 		else
 		{
-			dayTime -= 0.0001f;
-			if (dayTime <= 0.5f)
+			dayTime -= 0.001f;
+			if (dayTime <= 0.3f)
 				isDay = !isDay;
 		}
 	}
@@ -225,7 +227,6 @@ public class SceneRenderer implements Renderer
 
 		// Lights initializations
 		light = new Light(gl, GL10.GL_LIGHT0);
-		light.setDiffuseColor(new float[]{0.5f, 0.5f, 0.5f});
 
 		// Game initializations
 		TextureLinker.Initialize(gl);

@@ -41,6 +41,7 @@ public class Hud
 
     public void draw(GL10 gl)
     {
+        gl.glDisable(GL10.GL_LIGHTING);
         setOrthographicProjection(gl);
         //lifesCounter.draw(gl);
         //shipImage.draw(gl);
@@ -50,5 +51,6 @@ public class Hud
 
         energyContainer.draw(gl);
         energyBar.draw(gl);
+        gl.glEnable(GL10.GL_LIGHTING);
     }
 }

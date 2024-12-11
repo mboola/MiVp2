@@ -1,9 +1,7 @@
 package com.example.p2.main;
 
 import android.opengl.GLU;
-import android.view.KeyEvent;
 
-import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.Vector3;
 
 import javax.microedition.khronos.opengles.GL10;

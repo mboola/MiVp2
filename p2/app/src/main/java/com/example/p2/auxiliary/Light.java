@@ -31,6 +31,7 @@ public class Light
     public void setPosition(float[] pos) {
         fb_pos = FloatBuffer.wrap(pos);
         gl.glLightfv(lightid, GL10.GL_POSITION, fb_pos);
+        setPosition();
     }
 
     public void setPosition() {		// Després d'una transformació es torna a cridar aquest metode

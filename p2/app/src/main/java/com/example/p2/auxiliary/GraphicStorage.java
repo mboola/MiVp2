@@ -34,8 +34,8 @@ public class GraphicStorage
         initializeTexture(context, "windmill_texture", R.raw.windmill_texture);
         initializeTexture(context, "windmill_structure_texture", R.raw.windmill_struct_texture);
         initializeTexture(context, "door_texture", R.raw.armwing_texture); // TODO : change this
-        initializeTexture(context, "door_structure_texture", R.raw.static1_texture); // TODO : change this
-        initializeTexture(context, "static_texture", R.raw.static1_texture);
+        initializeTexture(context, "door_structure_texture", R.raw.static_texture);
+        initializeTexture(context, "static_texture", R.raw.static_texture);
 
         // Hud textures
         initializeTexture(context, "shield_text", R.raw.shield_text);
@@ -50,6 +50,7 @@ public class GraphicStorage
         initializeMesh(context, "static", R.raw.static1);
 
         // Entities meshes
+        initializeMesh(context, "projectile_mesh", R.raw.projectile);
         initializeMesh(context, "armwing_mesh", R.raw.armwing);
         initializeMesh(context, "door_mesh", R.raw.door);
         initializeMesh(context, "door_structure_mesh", R.raw.door_structure);

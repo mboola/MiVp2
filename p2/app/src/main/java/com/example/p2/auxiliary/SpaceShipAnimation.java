@@ -1,4 +1,4 @@
-package com.example.p2.main;
+package com.example.p2.auxiliary;
 
 import javax.microedition.khronos.opengles.GL10;
 

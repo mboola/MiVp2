@@ -6,7 +6,7 @@ import com.example.p2.auxiliary.Vector3;
 import com.example.p2.entities.Entity;
 import com.example.p2.entities.IEntity;
 import com.example.p2.entities.prefabs.ProjectileEntity;
-import com.example.p2.main.SpaceShipAnimation;
+import com.example.p2.auxiliary.SpaceShipAnimation;
 
 import javax.microedition.khronos.opengles.GL10;
 

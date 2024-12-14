@@ -1,5 +1,6 @@
 package com.example.p2.entities.prefabs;
 
+import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.MeshFactory;
 import com.example.p2.auxiliary.Vector3;
@@ -26,7 +27,7 @@ public class ProjectileEntity extends Entity
     {
         this.position = position;
         this.direction = direction;
-        mesh = MeshFactory.createMesh("projectile_texture");
+        mesh = GraphicStorage.getMesh("projectile", "projectile_texture");
         mesh.setUVs(uvs);
         frames = 0;
     }

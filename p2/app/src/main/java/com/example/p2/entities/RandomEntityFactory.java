@@ -19,8 +19,8 @@ public class RandomEntityFactory implements IEntityFactory
         updatesToNextEntity = 0;
         // initialize collection of entities
         spawners = new ArrayList<EntityGenerator>();
-       // spawners.add(new BasicEntityGenerator());
-       // spawners.add(new DoorGenerator());
+        spawners.add(new BasicEntityGenerator());
+        spawners.add(new DoorGenerator());
         spawners.add(new WindmillGenerator());
     }
     public void generateEntities(List<IEntity> entities)

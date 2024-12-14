@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.example.p2.auxiliary.GraphicStorage;
+import com.example.p2.main.scene.SceneRenderer;
 
 public class MainActivity extends Activity {
 

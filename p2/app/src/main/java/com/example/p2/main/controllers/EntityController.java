@@ -1,4 +1,4 @@
-package com.example.p2.main;
+package com.example.p2.main.controllers;
 
 import com.example.p2.auxiliary.Vector3;
 import com.example.p2.entities.IEntity;

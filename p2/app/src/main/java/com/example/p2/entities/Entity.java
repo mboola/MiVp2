@@ -37,4 +37,9 @@ public abstract class Entity implements IEntity
         mesh.draw(gl);
         gl.glPopMatrix();
     }
+
+    public Vector3 getPosition()
+    {
+        return position;
+    }
 }

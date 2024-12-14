@@ -1,4 +1,4 @@
-package com.example.p2.main;
+package com.example.p2.main.scene;
 
 import com.example.p2.auxiliary.TextureImage;
 import com.example.p2.auxiliary.Vector3;

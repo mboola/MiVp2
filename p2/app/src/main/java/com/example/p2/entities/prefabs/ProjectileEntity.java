@@ -1,9 +1,10 @@
-package com.example.p2.entities;
+package com.example.p2.entities.prefabs;
 
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.MeshFactory;
 import com.example.p2.auxiliary.Vector3;
-import com.example.p2.main.SceneRenderer;
+import com.example.p2.entities.Entity;
+import com.example.p2.main.scene.SceneRenderer;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -25,7 +26,7 @@ public class ProjectileEntity extends Entity
     {
         this.position = position;
         this.direction = direction;
-        mesh = MeshFactory.createMesh("proyectile");
+        mesh = MeshFactory.createMesh("projectile_texture");
         mesh.setUVs(uvs);
         frames = 0;
     }

@@ -1,11 +1,12 @@
-package com.example.p2.main;
+package com.example.p2.main.scene;
 
 import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.Vector3;
 import com.example.p2.entities.Entity;
 import com.example.p2.entities.IEntity;
-import com.example.p2.entities.ProjectileEntity;
+import com.example.p2.entities.prefabs.ProjectileEntity;
+import com.example.p2.main.SpaceShipAnimation;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -30,7 +31,7 @@ public class SpaceShip extends Entity
         rotation = new Vector3(0,0,0);
         animation = new SpaceShipAnimation();
         timeSinceLastInput = 0;
-        mesh = GraphicStorage.getMesh("armwing", "armwing_texture");
+        mesh = GraphicStorage.getMesh("armwing_mesh", "armwing_texture");
     }
 
     // TODO : change how rotation of ship gets calculated
@@ -129,7 +130,6 @@ public class SpaceShip extends Entity
         if (rotation.z != 0)
             direction_z = (float)Math.tan(Math.toRadians(rotation.z));
 
-        System.out.println(position.x + "," + position.y + "," + position.z);
         IEntity projectile = new ProjectileEntity(new Vector3(position.x, position.y, position.z), new Vector3(direction_x, direction_y, direction_z));
         SceneRenderer.getRenderer().getEntityController().addEntity(projectile);
     }

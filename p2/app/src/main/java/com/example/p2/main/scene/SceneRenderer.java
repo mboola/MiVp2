@@ -1,24 +1,21 @@
-package com.example.p2.main;
+package com.example.p2.main.scene;
 
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.view.KeyEvent;
-import android.widget.Space;
 
-import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Light;
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.TextureLinker;
 import com.example.p2.auxiliary.Vector3;
+import com.example.p2.main.controllers.EntityController;
+import com.example.p2.main.controllers.MovementController;
 
 import java.nio.FloatBuffer;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class SceneRenderer implements Renderer
 {
@@ -80,7 +77,7 @@ public class SceneRenderer implements Renderer
 			getCamera().changeView();
 		}
 		else if (!gamePaused) {
-			movementController.keyPushed(keyCode);
+			movementController.setLastKeyPushed(keyCode);
 		}
 	}
 
@@ -118,6 +115,8 @@ public class SceneRenderer implements Renderer
 	 */
 	private void updateEntities()
 	{
+		movementController.handleKeyPushed();
+
 		camera.update();
 
 		// Update all entities: collided into something or else

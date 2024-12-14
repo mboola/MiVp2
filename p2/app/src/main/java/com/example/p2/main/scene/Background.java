@@ -1,10 +1,10 @@
-package com.example.p2.main;
+package com.example.p2.main.scene;
 
 import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.MeshFactory;
 import com.example.p2.auxiliary.Vector3;
-import com.example.p2.entities.DotEntity;
+import com.example.p2.entities.prefabs.DotEntity;
 import com.example.p2.entities.Entity;
 import com.example.p2.entities.IEntity;
 

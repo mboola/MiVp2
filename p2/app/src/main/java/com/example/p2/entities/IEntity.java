@@ -10,4 +10,5 @@ public interface IEntity {
     public boolean isDead();
     public boolean update();
     public void draw(GL10 gl);
+    public Vector3 getPosition();
 }

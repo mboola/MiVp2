@@ -25,26 +25,37 @@ public class GraphicStorage
 
     private static void initializeTextures(Context context)
     {
-        initializeTexture(context, "background", R.raw.kenshi_background2);
-        initializeTexture(context, "armwing_texture", R.raw.armwing_texture);
-        initializeTexture(context, "static1_texture", R.raw.static1_texture);
+        initializeTexture(context, "background", R.raw.kenshi_background);
         initializeTexture(context, "base_texture", R.raw.base_texture);
+
+        // Entities textures
+        initializeTexture(context, "projectile_texture", R.raw.projectile_texture);
+        initializeTexture(context, "armwing_texture", R.raw.armwing_texture);
+        initializeTexture(context, "windmill_texture", R.raw.windmill_texture);
+        initializeTexture(context, "windmill_structure_texture", R.raw.windmill_struct_texture);
+        initializeTexture(context, "door_texture", R.raw.armwing_texture); // TODO : change this
+        initializeTexture(context, "door_structure_texture", R.raw.static1_texture); // TODO : change this
+        initializeTexture(context, "static_texture", R.raw.static1_texture);
+
         // Hud textures
         initializeTexture(context, "shield_text", R.raw.shield_text);
         initializeTexture(context, "container", R.raw.container);
         initializeTexture(context, "shield_bar", R.raw.shield_bar);
         initializeTexture(context, "energy_bar", R.raw.energy_bar);
-        // Proyectile textures
-        initializeTexture(context, "proyectile", R.raw.proyectile);
     }
 
     private static void initializeMeshes(Context context)
     {
         initializeMesh(context, "dots", R.raw.dots);
-        initializeMesh(context, "armwing", R.raw.armwing);
-        initializeMesh(context, "static1", R.raw.static1);
-        initializeMesh(context, "door", R.raw.door);
-        initializeMesh(context, "door_structure", R.raw.door_structure);
+        initializeMesh(context, "static", R.raw.static1);
+
+        // Entities meshes
+        initializeMesh(context, "armwing_mesh", R.raw.armwing);
+        initializeMesh(context, "door_mesh", R.raw.door);
+        initializeMesh(context, "door_structure_mesh", R.raw.door_structure);
+        initializeMesh(context, "windmill_mesh", R.raw.windmill);
+        initializeMesh(context, "windmill_structure_mesh", R.raw.windmill_structure);
+
     }
 
     /*

@@ -50,4 +50,11 @@ public class Limits
     {
         return minY;
     }
+
+    public static float getRandDegree()
+    {
+        Random random = new Random();
+        int randomNumber = random.nextInt(360); // Generates a number in [0, 359]
+        return (float) randomNumber;
+    }
 }

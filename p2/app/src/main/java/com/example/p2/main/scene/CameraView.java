@@ -1,4 +1,4 @@
-package com.example.p2.main;
+package com.example.p2.main.scene;
 
 import android.opengl.GLU;
 

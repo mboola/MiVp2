@@ -1,5 +1,9 @@
 package com.example.p2.entities;
 
+import com.example.p2.entities.spawners.BasicEntityGenerator;
+import com.example.p2.entities.spawners.DoorGenerator;
+import com.example.p2.entities.spawners.WindmillGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,8 +19,9 @@ public class RandomEntityFactory implements IEntityFactory
         updatesToNextEntity = 0;
         // initialize collection of entities
         spawners = new ArrayList<EntityGenerator>();
-        spawners.add(new BasicEntityGenerator());
-        spawners.add(new DoorGenerator());
+       // spawners.add(new BasicEntityGenerator());
+       // spawners.add(new DoorGenerator());
+        spawners.add(new WindmillGenerator());
     }
     public void generateEntities(List<IEntity> entities)
     {

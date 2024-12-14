@@ -42,10 +42,9 @@ public class Background extends Entity
     }
 
     @Override
-    public boolean update()
+    public void update()
     {
         for (IEntity dot : dots) dot.update();
-        return false;
     }
 
     @Override

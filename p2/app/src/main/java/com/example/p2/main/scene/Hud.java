@@ -1,5 +1,7 @@
 package com.example.p2.main.scene;
 
+import android.transition.Scene;
+
 import com.example.p2.auxiliary.TextureImage;
 import com.example.p2.auxiliary.Vector3;
 
@@ -46,11 +48,28 @@ public class Hud
         //lifesCounter.draw(gl);
         //shipImage.draw(gl);
         shildText.draw(gl);
-        shieldContainer.draw(gl);
+
+        // scale health bar based on total health
+        gl.glPushMatrix();
+        float currentHealth = SceneRenderer.getRenderer().getSpaceShip().getCurrentHealth();
+        float scale = currentHealth / 100;
+        shieldBar.setCustomScale(new Vector3(scale, 1, 1));
         shieldBar.draw(gl);
+        gl.glPopMatrix();
+
+        shieldContainer.draw(gl);
+
+        // scale shield bar based on total energy
+        gl.glPushMatrix();
+        float currentEnergy = SceneRenderer.getRenderer().getSpaceShip().getCurrentEnergy();
+        scale = currentEnergy / 100;
+        energyBar.setCustomScale(new Vector3(scale, 1, 1));
+        energyBar.draw(gl);
+        gl.glPopMatrix();
 
         energyContainer.draw(gl);
-        energyBar.draw(gl);
+
         gl.glEnable(GL10.GL_LIGHTING);
     }
+
 }

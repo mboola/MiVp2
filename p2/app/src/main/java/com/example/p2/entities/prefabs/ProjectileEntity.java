@@ -32,7 +32,7 @@ public class ProjectileEntity extends Entity
     }
 
     @Override
-    public boolean update()
+    public void update()
     {
         // Update UVs
         if (frames > maxFrames)
@@ -52,9 +52,9 @@ public class ProjectileEntity extends Entity
         boolean outOfLimits = Limits.outOfLimits(position);
         if (!outOfLimits)
         {
-            return SceneRenderer.getRenderer().getEntityController().checkCollisions(position);
+            if (SceneRenderer.getRenderer().getEntityController().checkCollisions(position))
+                hasBeenHit();
         }
-        return outOfLimits;
     }
 
     @Override

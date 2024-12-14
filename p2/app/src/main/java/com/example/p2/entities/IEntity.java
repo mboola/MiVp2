@@ -8,7 +8,7 @@ public interface IEntity {
     public boolean hasCollided(Vector3 position);
     public void hasBeenHit();
     public boolean isDead();
-    public boolean update();
+    public void update();
     public void draw(GL10 gl);
     public Vector3 getPosition();
 }

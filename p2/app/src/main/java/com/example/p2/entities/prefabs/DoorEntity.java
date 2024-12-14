@@ -27,10 +27,10 @@ public class DoorEntity extends Entity
     }
 
     @Override
-    public boolean update()
+    public void update()
     {
         updateDoorPosition();
-        return super.update();
+        super.update();
     }
 
     private void updateDoorPosition()

@@ -7,7 +7,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class StaticEntity extends Entity
 {
-    private float radius = 1f;
     public StaticEntity(Vector3 position, Mesh mesh)
     {
         this.mesh = mesh;

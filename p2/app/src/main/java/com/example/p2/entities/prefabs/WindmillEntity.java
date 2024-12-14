@@ -26,10 +26,10 @@ public class WindmillEntity extends Entity
     }
 
     @Override
-    public boolean update()
+    public void update()
     {
         windmillRotation += 1f;
-        return super.update();
+        super.update();
     }
 
     @Override
@@ -50,5 +50,19 @@ public class WindmillEntity extends Entity
         gl.glRotatef(windmillRotation, 1, 0, 0);
         windmill.draw(gl);
         gl.glPopMatrix();
+    }
+
+    @Override
+    public boolean hasCollided(Vector3 entityPosition)
+    {
+        float dist_x = entityPosition.x - position.x;
+        float dist_y = entityPosition.y - position.y;
+        float dist_z = entityPosition.z - position.z;
+
+        float dist_sqrd = dist_x * dist_x + dist_y * dist_y + dist_z + dist_z;
+
+        if (dist_sqrd <= radius * radius)
+            return true;
+        return false;
     }
 }

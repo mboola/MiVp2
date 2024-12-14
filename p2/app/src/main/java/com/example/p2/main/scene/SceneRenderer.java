@@ -69,6 +69,10 @@ public class SceneRenderer implements Renderer
 		return camera;
 	}
 
+	public SpaceShip getSpaceShip() {
+		return spaceShip;
+	}
+
 	public void keyPushed(int keyCode) {
 		if (keyCode == KeyEvent.KEYCODE_SPACE) {
 			gamePaused = !gamePaused;

@@ -14,6 +14,7 @@ public abstract class Entity implements IEntity
     protected Vector3 position;
     protected Mesh mesh;
     protected boolean alive = true;
+    protected float radius = 1f;
     public boolean hasCollided(Vector3 position) {
         return false;
     }
@@ -25,13 +26,16 @@ public abstract class Entity implements IEntity
     {
         return !alive;
     }
-    public boolean update()
+    public void update()
     {
         position.z += 0.1f;
-        return Limits.outOfLimits(position);
+        if (Limits.outOfLimits(position))
+            hasBeenHit();
     }
     public void draw(GL10 gl)
     {
+        if (isDead())
+            return;
         gl.glPushMatrix();
         gl.glTranslatef(position.x, position.y, position.z);
         mesh.draw(gl);

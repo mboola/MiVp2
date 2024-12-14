@@ -23,6 +23,11 @@ public class SpaceShip extends Entity
     private final float rotationDecrementer = 0.5f;
     private final float maxRotation = 20f;
     private final float rotationMultiplier = 20f;
+    private float health = 100;
+    private float energy = 100;
+    private int minEnergyToShoot = 5;
+    private boolean isInvencible = false;
+    private float invencibleCooldown;
 
     public SpaceShip(Vector3 position, CameraView camera)
     {
@@ -60,19 +65,37 @@ public class SpaceShip extends Entity
         camera.updatePosition(position.x, position.y);
     }
 
-    public Vector3 getPosition()
-    {
-        return position;
-    }
-
-    public boolean update()
+    public void update()
     {
         animation.update();
+
+        if (energy < 100)
+            energy += 0.1f;
+
+        if (!isInvencible)
+        {
+            if (SceneRenderer.getRenderer().getEntityController().checkCollisions(position))
+            {
+                isInvencible = true;
+                invencibleCooldown = 3;
+                health -= 12.5f;
+                if (health <= 0)
+                    hasBeenHit();
+            }
+        }
+        else
+        {
+            System.out.println(invencibleCooldown);
+
+            invencibleCooldown -= 0.1f;
+            if (invencibleCooldown < 0)
+                isInvencible = false;
+        }
 
         if (timeSinceLastInput > 0)
         {
             timeSinceLastInput -= delayDecrementer;
-            return false;
+            return ;
         }
 
         if (rotation.x > 0)
@@ -99,8 +122,6 @@ public class SpaceShip extends Entity
             if (rotation.y > 0)
                 rotation.y = 0;
         }
-        animation.update();
-        return false;
     }
 
     @Override
@@ -119,6 +140,14 @@ public class SpaceShip extends Entity
 
     public void shoot()
     {
+        // If we have enough energy
+        if (energy < minEnergyToShoot)
+            return ;
+
+        energy -= 20;
+        if (energy < 0)
+            energy = 0;
+
         // Create a new IEntity projectile with the direction of the spaceship
         float direction_x = 0;
         if (rotation.x != 0)
@@ -134,8 +163,12 @@ public class SpaceShip extends Entity
         SceneRenderer.getRenderer().getEntityController().addEntity(projectile);
     }
 
-    @Override
-    public boolean hasCollided(Vector3 position) {
-        return false;
+    public float getCurrentEnergy()
+    {
+        return energy;
+    }
+
+    public float getCurrentHealth() {
+        return health;
     }
 }

@@ -30,20 +30,12 @@ public class EntityController {
         // Checks if new entities must be created
         entityFactory.generateEntities(entities);
 
-        Iterator<IEntity> iterator = entities.iterator();
-        while (iterator.hasNext()) {
-            IEntity entity = iterator.next();
-            if (entity.update()) {
-                iterator.remove();
-            }
+        for (IEntity entity : entities) {
+            entity.update();
         }
-        iterator = entities.iterator();
-        while (iterator.hasNext()) {
-            IEntity entity = iterator.next();
-            if (entity.isDead()) {
-                iterator.remove();
-            }
-        }
+
+
+        entities.removeIf(IEntity::isDead);
     }
     public void draw(GL10 gl)
     {
@@ -55,10 +47,10 @@ public class EntityController {
 
     public boolean checkCollisions(Vector3 position)
     {
-        Iterator<IEntity> iterator = entities.iterator();
-        while (iterator.hasNext()) {
-            IEntity entityToCollide = iterator.next();
-            if (entityToCollide.hasCollided(position)) {
+        for (IEntity entityToCollide : entities)
+        {
+            if (entityToCollide.hasCollided(position))
+            {
                 entityToCollide.hasBeenHit();
                 return true;
             }

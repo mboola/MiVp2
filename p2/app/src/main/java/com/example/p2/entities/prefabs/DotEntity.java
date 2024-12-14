@@ -14,11 +14,10 @@ public class DotEntity extends Entity
     }
 
     @Override
-    public boolean update()
+    public void update()
     {
         position.z += 0.1f;
         if (Limits.outOfLimits(position))
             position.z = Limits.getFarZ() + position.z;
-        return false;
     }
 }

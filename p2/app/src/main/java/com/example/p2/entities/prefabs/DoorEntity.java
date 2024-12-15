@@ -14,7 +14,8 @@ public class DoorEntity extends Entity
     private IEntity door;
     private IEntity doorStruct;
     private boolean goingUp = true;
-    private float maxHeight = 1f;
+    private float maxHeight = 2f;
+    private float minHeight = 1f;
     private float radius = 2f;
 
     public DoorEntity(Vector3 position)
@@ -46,7 +47,7 @@ public class DoorEntity extends Entity
         else
         {
             doorPosition.y -= 0.05f;
-            if (doorPosition.y <= -maxHeight)
+            if (doorPosition.y <= 0)
                 goingUp = true;
         }
     }

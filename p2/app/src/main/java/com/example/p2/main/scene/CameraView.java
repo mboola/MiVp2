@@ -2,6 +2,7 @@ package com.example.p2.main.scene;
 
 import android.opengl.GLU;
 
+import com.example.p2.auxiliary.Time;
 import com.example.p2.auxiliary.Vector3;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -21,8 +22,6 @@ public class CameraView
     private boolean followsShip;
     private final float delayTilReturn = 1f;
     private float timeSinceLastInput;
-    private final float delayDecrementer = 0.01f;
-    private final float rotationDecrementer = 0.005f;
 
     public CameraView()
     {
@@ -81,19 +80,19 @@ public class CameraView
     {
         if (timeSinceLastInput > 0)
         {
-            timeSinceLastInput -= delayDecrementer;
+            timeSinceLastInput -= Time.deltaTime;
             return ;
         }
 
         if (modificationUp.x > 0)
         {
-            modificationUp.x -= rotationDecrementer;
+            modificationUp.x -= Time.deltaTime;
             if (modificationUp.x < 0)
                 modificationUp.x = 0;
         }
         else if (modificationUp.x < 0)
         {
-            modificationUp.x += rotationDecrementer;
+            modificationUp.x += Time.deltaTime;
             if (modificationUp.x > 0)
                 modificationUp.x = 0;
         }

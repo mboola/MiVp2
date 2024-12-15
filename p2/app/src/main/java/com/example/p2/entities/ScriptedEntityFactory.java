@@ -3,8 +3,6 @@ package com.example.p2.entities;
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.Time;
 import com.example.p2.auxiliary.Vector3;
-import com.example.p2.entities.IEntity;
-import com.example.p2.entities.IEntityFactory;
 import com.example.p2.entities.spawners.DoorGenerator;
 import com.example.p2.entities.spawners.RuinsGenerator;
 import com.example.p2.entities.spawners.WindmillGenerator;

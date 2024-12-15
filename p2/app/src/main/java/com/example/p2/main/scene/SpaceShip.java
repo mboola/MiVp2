@@ -2,6 +2,7 @@ package com.example.p2.main.scene;
 
 import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Limits;
+import com.example.p2.auxiliary.Time;
 import com.example.p2.auxiliary.Vector3;
 import com.example.p2.entities.Entity;
 import com.example.p2.entities.IEntity;
@@ -19,7 +20,6 @@ public class SpaceShip extends Entity
     // Seconds passed without input that makes the ship return to original position
     private final float delayTilReturn = 1f;
     private float timeSinceLastInput;
-    private final float delayDecrementer = 0.01f;
     private final float rotationDecrementer = 0.5f;
     private final float maxRotation = 20f;
     private final float rotationMultiplier = 20f;
@@ -38,8 +38,6 @@ public class SpaceShip extends Entity
         timeSinceLastInput = 0;
         mesh = GraphicStorage.getMesh("armwing_mesh", "armwing_texture");
     }
-
-    // TODO : change how rotation of ship gets calculated
 
     public void translate(float x, float y, float z)
     {
@@ -70,7 +68,7 @@ public class SpaceShip extends Entity
         animation.update();
 
         if (energy < 100)
-            energy += 0.1f;
+            energy += Time.deltaTime;
 
         if (!isInvencible)
         {
@@ -85,16 +83,14 @@ public class SpaceShip extends Entity
         }
         else
         {
-            System.out.println(invencibleCooldown);
-
-            invencibleCooldown -= 0.1f;
+            invencibleCooldown -= Time.deltaTime;
             if (invencibleCooldown < 0)
                 isInvencible = false;
         }
 
         if (timeSinceLastInput > 0)
         {
-            timeSinceLastInput -= delayDecrementer;
+            timeSinceLastInput -= Time.deltaTime;
             return ;
         }
 

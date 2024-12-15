@@ -28,7 +28,7 @@ public abstract class Entity implements IEntity
     }
     public void update()
     {
-        position.z += 0.1f;
+        position.z += 0.2f;
         if (Limits.outOfLimits(position))
             hasBeenHit();
     }

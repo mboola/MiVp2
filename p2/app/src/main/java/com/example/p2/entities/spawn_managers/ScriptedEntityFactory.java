@@ -1,8 +1,10 @@
-package com.example.p2.entities;
+package com.example.p2.entities.spawn_managers;
 
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.Time;
 import com.example.p2.auxiliary.Vector3;
+import com.example.p2.entities.IEntity;
+import com.example.p2.entities.spawners.BigColumnGenerator;
 import com.example.p2.entities.spawners.DoorGenerator;
 import com.example.p2.entities.spawners.RuinsGenerator;
 import com.example.p2.entities.spawners.WindmillGenerator;
@@ -13,15 +15,17 @@ public class ScriptedEntityFactory implements IEntityFactory
 {
     private int spawnRange = 0;
     private float intervalBetweenSpawns = 1;
-    private final int totalRange = 3;
-    DoorGenerator doorGenerator;
-    WindmillGenerator windmillGenerator;
-    RuinsGenerator ruinsGenerator;
+    private final int totalRange = 4;
+    private DoorGenerator doorGenerator;
+    private WindmillGenerator windmillGenerator;
+    private RuinsGenerator ruinsGenerator;
+    private BigColumnGenerator bugColumnGenerator;
     public ScriptedEntityFactory()
     {
         doorGenerator = new DoorGenerator();
         windmillGenerator = new WindmillGenerator();
         ruinsGenerator = new RuinsGenerator();
+        bugColumnGenerator = new BigColumnGenerator();
     }
     public void generateEntities(List<IEntity> entities)
     {
@@ -53,6 +57,13 @@ public class ScriptedEntityFactory implements IEntityFactory
                 entities.addAll(ruinsGenerator.spawn(
                         new Vector3(0, 0, Limits.getFarZ()),
                         new Vector3(0, 0, 0)));
+                break;
+            case 3:
+                intervalBetweenSpawns = 2;
+                entities.addAll(bugColumnGenerator.spawn(
+                        new Vector3(0,0, Limits.getFarZ()),
+                        new Vector3(0,0,0)
+                ));
                 break;
         }
         spawnRange++;

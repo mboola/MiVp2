@@ -68,7 +68,7 @@ public class SpaceShip extends Entity
         animation.update();
 
         if (energy < 100)
-            energy += Time.deltaTime;
+            energy += Time.deltaTime * 25;
 
         if (!isInvencible)
         {

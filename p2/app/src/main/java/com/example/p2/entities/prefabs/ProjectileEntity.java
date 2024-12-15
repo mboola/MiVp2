@@ -3,6 +3,7 @@ package com.example.p2.entities.prefabs;
 import com.example.p2.auxiliary.GraphicStorage;
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.MeshFactory;
+import com.example.p2.auxiliary.Time;
 import com.example.p2.auxiliary.Vector3;
 import com.example.p2.entities.Entity;
 import com.example.p2.main.scene.SceneRenderer;
@@ -20,7 +21,7 @@ public class ProjectileEntity extends Entity
 
     private int frames;
     private final int maxFrames = 15;
-    private float velMult = 0.05f;
+    private float velMult = 8f;
     private Vector3 direction;
 
     public ProjectileEntity(Vector3 position, Vector3 direction)
@@ -47,9 +48,9 @@ public class ProjectileEntity extends Entity
             frames = 0;
         }
         frames++;
-        position.x -= (direction.x * velMult);
-        position.y -= (direction.y * -velMult);
-        position.z -= (direction.z * velMult);
+        position.x -= (direction.x * Time.deltaTime * velMult);
+        position.y -= (direction.y * -Time.deltaTime * velMult);
+        position.z -= (direction.z * Time.deltaTime * velMult);
         boolean outOfLimits = Limits.outOfLimits(position);
         if (!outOfLimits)
         {

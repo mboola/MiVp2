@@ -1,4 +1,6 @@
-package com.example.p2.entities;
+package com.example.p2.entities.spawn_managers;
+
+import com.example.p2.entities.IEntity;
 
 import java.util.List;
 

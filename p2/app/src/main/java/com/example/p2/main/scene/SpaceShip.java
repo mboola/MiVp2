@@ -155,7 +155,7 @@ public class SpaceShip extends Entity
         if (rotation.z != 0)
             direction_z = (float)Math.tan(Math.toRadians(rotation.z));
 
-        IEntity projectile = new ProjectileEntity(new Vector3(position.x, position.y, position.z), new Vector3(direction_x, direction_y, direction_z));
+        IEntity projectile = new ProjectileEntity(new Vector3(position.x, position.y + 0.1f, position.z), new Vector3(direction_x, direction_y, direction_z));
         SceneRenderer.getRenderer().getEntityController().addEntity(projectile);
     }
 

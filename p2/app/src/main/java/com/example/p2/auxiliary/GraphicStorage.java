@@ -29,7 +29,7 @@ public class GraphicStorage
         initializeTexture(context, "base_texture", R.raw.base_texture);
 
         // Entities textures
-        initializeTexture(context, "projectile_texture", R.raw.projectile_texture);
+        initializeTexture(context, "projectile_texture", R.raw.projectile_texture2);
         initializeTexture(context, "armwing_texture", R.raw.armwing_texture);
         initializeTexture(context, "windmill_texture", R.raw.windmill_texture);
         initializeTexture(context, "windmill_structure_texture", R.raw.windmill_struct_texture);

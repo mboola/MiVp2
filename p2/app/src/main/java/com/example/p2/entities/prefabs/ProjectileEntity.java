@@ -27,7 +27,7 @@ public class ProjectileEntity extends Entity
     {
         this.position = position;
         this.direction = direction;
-        mesh = GraphicStorage.getMesh("projectile", "projectile_texture");
+        mesh = MeshFactory.createMesh("projectile_texture");
         mesh.setUVs(uvs);
         frames = 0;
     }

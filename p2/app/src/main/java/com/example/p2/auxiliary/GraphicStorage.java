@@ -50,7 +50,6 @@ public class GraphicStorage
         initializeMesh(context, "static", R.raw.static1);
 
         // Entities meshes
-        initializeMesh(context, "projectile_mesh", R.raw.projectile);
         initializeMesh(context, "armwing_mesh", R.raw.armwing);
         initializeMesh(context, "door_mesh", R.raw.door);
         initializeMesh(context, "door_structure_mesh", R.raw.door_structure);

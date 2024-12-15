@@ -3,9 +3,8 @@ package com.example.p2.main.controllers;
 import com.example.p2.auxiliary.Vector3;
 import com.example.p2.entities.IEntity;
 import com.example.p2.entities.IEntityFactory;
-import com.example.p2.entities.RandomEntityFactory;
+import com.example.p2.entities.ScriptedEntityFactory;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,8 +19,8 @@ public class EntityController {
     public EntityController()
     {
         entities = new LinkedList<>();
-        entityFactory = new RandomEntityFactory();
-        //entityFactory = new ScriptedEntityFactory();
+        //entityFactory = new RandomEntityFactory();
+        entityFactory = new ScriptedEntityFactory();
     }
 
     // Updates all entities inside controller

@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import com.example.p2.auxiliary.Light;
 import com.example.p2.auxiliary.Limits;
 import com.example.p2.auxiliary.TextureLinker;
+import com.example.p2.auxiliary.Time;
 import com.example.p2.auxiliary.Vector3;
 import com.example.p2.main.controllers.EntityController;
 import com.example.p2.main.controllers.MovementController;
@@ -31,6 +32,8 @@ public class SceneRenderer implements Renderer
 	private float dayTime;
 	private boolean isDay;
 	private boolean graphicsInitialized = false;
+
+	private float startTime = 0;
 
 	private int height;
 	private int width;
@@ -101,7 +104,9 @@ public class SceneRenderer implements Renderer
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
-		// TODO : calculate deltaTime
+		long endTime = System.nanoTime();
+
+		Time.deltaTime = (endTime - startTime) / 1000000000;
 
 		if (!graphicsInitialized)
 			return ;
@@ -112,6 +117,8 @@ public class SceneRenderer implements Renderer
 		gl.glLightModelfv(GL10.GL_LIGHT_MODEL_AMBIENT, new float[]{dayTime, dayTime, dayTime, 0}, 0);
 
 		drawEntities(gl);
+
+		startTime = System.nanoTime();
 	}
 
 	/*
